@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="{{LANG}}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ACCOUNT}} — {{MEETING_TITLE}} — {{DATE_LONG}}</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M1.155,4.93v.512L9,9.868l7.006-3.957,0,1.6L9,11.491,1.55,7.258l-.395.22V10.54L9,14.955l7.006-3.942,0,1.586L9,16.581,1.55,12.347l-.395.22v.519L9,17.5l7.845-4.414V10.021l-.4-.218L9,14.036,1.992,10.054V8.476L9,12.414,16.845,8V4.978l-.4-.219L9,8.993,2.352,5.215,9,1.46l5.476,3.094.479-.269V3.863L9,.5Z' fill='%23FF3621'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    /* ═══ DESIGN TOKENS — official Databricks palette ═══ */
+    :root{
+      --bg:#F9F7F4;      --surface:#fff; --surface2:#EEEDE9;
+      --border:#DCE0E2;  --border2:#c4cacd;
+      --red:#FF3621;     --red-dim:rgba(255,54,33,0.07);
+      --navy:#1B3139;
+      --text:#1B3139;    --text2:#5A6F77; --text3:#8a9aa1;
+      --nav-h:52px; --r:12px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+    /* ═══ NAV ═══ */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 2.5rem;}
+    .nav-left{display:flex;align-items:center;gap:0.75rem;}
+    .dbx-mark{width:28px;height:28px;}
+    .dbx-word{font-weight:800;font-size:clamp(1.15rem,1.4vw,1.55rem);letter-spacing:-0.6px;color:var(--text);}
+    .nav-title{font-weight:700;font-size:clamp(1.1rem,1.3vw,1.5rem);letter-spacing:-0.3px;}
+    .nav-title em{color:var(--red);font-style:normal;}
+    .nav-sep{width:1px;height:16px;background:var(--border);}
+    .nav-sub{font-size:clamp(0.95rem,1.1vw,1.25rem);color:var(--text3);}
+
+    /* ═══ PAGE ═══ */
+    .page{min-height:100vh;padding:calc(var(--nav-h) + 1rem) 4rem 1.5rem;background:radial-gradient(ellipse at 85% 15%,rgba(27,49,57,0.05) 0%,var(--bg) 60%);}
+    .ch-label{font-size:clamp(0.8rem,0.95vw,1.05rem);font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);padding-bottom:0.6rem;margin-bottom:clamp(0.5rem,1.2vh,1rem);border-bottom:1px solid var(--border);}
+    .agenda-stack{display:flex;flex-direction:column;gap:clamp(0.35rem,0.7vh,0.6rem);}
+
+    /* ═══ TOPIC TABLES ═══ */
+    table.agenda{width:100%;table-layout:fixed;border-collapse:separate;border-spacing:0;background:var(--surface);border:1.5px solid #A82015;border-radius:var(--r);overflow:hidden;}
+    table.agenda col.c-topic{width:12.5rem;}
+    table.agenda col.c-when{width:5.5rem;}
+    table.agenda td{padding:0.35rem 1rem;font-size:clamp(0.8rem,0.9vw,1.05rem);line-height:1.35;color:var(--text2);border-bottom:1px dashed var(--border);vertical-align:top;}
+    table.agenda tr:last-child td{border-bottom:none;}
+    table.agenda td.topic{font-weight:700;color:var(--navy);vertical-align:middle;border-right:1px solid var(--border);border-bottom:none;}
+    table.agenda td.when{white-space:nowrap;padding-top:0.45rem;}
+    .when-chip{font-family:'DM Mono',monospace;font-size:0.82em;border-radius:999px;padding:0.1rem 0.6rem;border:1px solid var(--border);background:var(--surface2);color:var(--text2);}
+    .abul{margin:0;padding-left:1.1rem;}
+    .abul li{margin:0.05rem 0;}
+    .abul li::marker{color:var(--red);}
+    .abul li b{font-weight:700;color:var(--navy);}
+    .abul li code{font-family:'DM Mono',monospace;font-size:0.9em;color:var(--red);}
+    .owner{font-weight:700;color:var(--red);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <svg class="dbx-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><path d="M1.155,4.93v.512L9,9.868l7.006-3.957,0,1.6L9,11.491,1.55,7.258l-.395.22V10.54L9,14.955l7.006-3.942,0,1.586L9,16.581,1.55,12.347l-.395.22v.519L9,17.5l7.845-4.414V10.021l-.4-.218L9,14.036,1.992,10.054V8.476L9,12.414,16.845,8V4.978l-.4-.219L9,8.993,2.352,5.215,9,1.46l5.476,3.094.479-.269V3.863L9,.5Z" fill="#ff3621"/></svg>
+    <span class="dbx-word">databricks</span>
+    <div class="nav-sep"></div>
+    <span class="nav-title">{{ACCOUNT}} <em>{{NAV_ACCENT}}</em></span>
+    <div class="nav-sep"></div>
+    <span class="nav-sub">{{MEETING_TITLE}}</span>
+  </div>
+</nav>
+
+<section class="page">
+  <div class="ch-label">Meeting report · {{DATE_SHORT}}</div>
+  <div class="agenda-stack">
+
+    <!-- ONE TABLE PER TOPIC — repeat this block -->
+    <table class="agenda"><colgroup><col class="c-topic"><col class="c-when"><col></colgroup>
+      <tr><td class="topic">{{TOPIC}}</td><td class="when"><span class="when-chip">{{DATE_SHORT}}</span></td><td><ul class="abul"><li>{{BULLET with <b>key words</b> in bold}}</li></ul></td></tr>
+    </table>
+
+    <!-- LAST TABLE — next steps, one bullet per action -->
+    <table class="agenda"><colgroup><col class="c-topic"><col class="c-when"><col></colgroup>
+      <tr><td class="topic">Next steps</td><td class="when"><span class="when-chip">{{DATE_SHORT}}</span></td><td><ul class="abul"><li><span class="owner">{{OWNER}}</span> · {{ACTION}}</li></ul></td></tr>
+    </table>
+
+  </div>
+</section>
+
+</body>
+</html>

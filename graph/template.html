@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Example Agent — Architecture</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M1.155,4.93v.512L9,9.868l7.006-3.957,0,1.6L9,11.491,1.55,7.258l-.395.22V10.54L9,14.955l7.006-3.942,0,1.586L9,16.581,1.55,12.347l-.395.22v.519L9,17.5l7.845-4.414V10.021l-.4-.218L9,14.036,1.992,10.054V8.476L9,12.414,16.845,8V4.978l-.4-.219L9,8.993,2.352,5.215,9,1.46l5.476,3.094.479-.269V3.863L9,.5Z' fill='%23FF3621'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="ico-user"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="ico-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+    <symbol id="ico-cpu"      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></symbol>
+    <symbol id="ico-message"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></symbol>
+    <symbol id="ico-check"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+    <symbol id="ico-chart"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></symbol>
+    <symbol id="ico-target"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="ico-monitor"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+    <symbol id="ico-search"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></symbol>
+    <symbol id="ico-arrow"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  </svg>
+
+  <style>
+    /* ═══ DESIGN TOKENS — official Databricks palette ═══ */
+    :root{
+      --bg:#F9F7F4;      --surface:#fff; --surface2:#EEEDE9; --surface3:#e3e1dc;
+      --border:#DCE0E2;  --border2:#c4cacd;
+      --red:#FF3621;     --red-dim:rgba(255,54,33,0.07);
+      --navy:#1B3139;    --navy-dim:rgba(27,49,57,0.06);
+      --navy-900:#0B2026;
+      --blue:#2272B4;    --blue-dim:rgba(34,114,180,0.08);
+      --text:#1B3139;    --text2:#5A6F77; --text3:#8a9aa1;
+      --nav-h:52px; --r:12px; --r-lg:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-snap-type:y mandatory;overflow-y:scroll;}
+    body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+    /* ═══ NAV ═══ */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
+    .nav-left{display:flex;align-items:center;gap:0.75rem;}
+    .dbx-mark{width:28px;height:28px;}
+    .dbx-word{font-weight:800;font-size:clamp(1.15rem,1.4vw,1.55rem);letter-spacing:-0.6px;color:var(--text);}
+    .nav-title{font-weight:700;font-size:clamp(1.1rem,1.3vw,1.5rem);letter-spacing:-0.3px;}
+    .nav-title em{color:var(--red);font-style:normal;}
+    .nav-sep{width:1px;height:16px;background:var(--border);}
+    .nav-sub{font-size:clamp(0.95rem,1.1vw,1.25rem);color:var(--text3);}
+    .nav-dots{display:flex;align-items:center;gap:6px;}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .2s,transform .2s;}
+    .dot.on{background:var(--red);transform:scale(1.45);}
+    /* previous / next slide arrows — stacked on the right edge */
+    #slideNav{position:fixed;right:clamp(10px,1.4vw,22px);top:50%;transform:translateY(-50%);z-index:110;display:flex;flex-direction:column;gap:10px;}
+    .snav{width:46px;height:46px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);box-shadow:0 2px 10px rgba(0,0,0,0.08);transition:color .2s,border-color .2s,box-shadow .2s,opacity .2s;padding:0;}
+    .snav:hover{color:var(--red);border-color:var(--red);box-shadow:0 4px 16px rgba(0,0,0,0.14);}
+    .snav svg{width:22px;height:22px;}
+    .snav[disabled]{opacity:0.28;pointer-events:none;box-shadow:none;}
+
+    /* ═══ SLIDE BASE ═══ */
+    .slide{height:100vh;scroll-snap-align:start;display:grid;padding-top:var(--nav-h);overflow:hidden;}
+    .ch-label{font-size:clamp(0.8rem,0.95vw,1.05rem);font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:0.6rem;}
+    h1{font-size:clamp(3.2rem,5vw,5rem);font-weight:900;letter-spacing:-2.5px;line-height:1.03;margin-bottom:1.2rem;}
+    .lead{font-size:clamp(1.3rem,1.55vw,1.85rem);color:var(--text2);line-height:1.6;max-width:46ch;}
+    .red{color:var(--red);}
+
+    /* ═══ ARCHITECTURE GRAPH (#sarch) ═══ */
+    #sarch,#sarch2{grid-template-rows:auto 1fr;background:radial-gradient(ellipse at 50% 45%,rgba(255,54,33,0.05) 0%,var(--bg) 60%);}
+    #sarch .top,#sarch2 .top{padding:1.4rem 4rem 0.9rem;border-bottom:1px solid var(--border);}
+    #sarch .top h1,#sarch2 .top h1{font-size:clamp(2.4rem,3.8vw,3.8rem);margin-bottom:0.5rem;}
+    #sarch .top .lead,#sarch2 .top .lead{font-size:clamp(1.05rem,1.3vw,1.5rem);max-width:96ch;line-height:1.45;}
+    #sarch .body,#sarch2 .body{min-height:0;padding:clamp(0.6rem,1.4vh,1.4rem) clamp(2rem,4vw,5rem) clamp(0.8rem,1.6vh,1.6rem);display:flex;}
+    #sarch svg.graph,#sarch2 svg.graph{width:100%;height:100%;display:block;}
+
+    .graph .node rect{fill:var(--surface);stroke:var(--border2);stroke-width:1.5;}
+    .graph .node.agent rect{fill:#FFF4F2;stroke:var(--red);stroke-width:2.5;}
+    .graph .node .t{font-family:'DM Sans',sans-serif;font-weight:700;font-size:23px;fill:var(--navy);}
+    .graph .node .s{font-family:'DM Sans',sans-serif;font-weight:500;font-size:16px;fill:var(--red);}
+    .graph .node use{color:var(--navy);}
+    .graph .node.agent use{color:var(--red);}
+    .graph .edge{fill:none;stroke:var(--text3);stroke-width:2;}
+    .graph .edge.dash{stroke-dasharray:7 7;}
+    .graph .lbl{font-family:'DM Sans',sans-serif;font-size:16.5px;fill:var(--text2);}
+    .graph .band{fill:var(--surface2);stroke:var(--border);stroke-width:1;}
+    .graph .band-lbl{font-family:'DM Sans',sans-serif;font-weight:700;font-size:13px;letter-spacing:2.5px;fill:var(--text3);}
+    .graph .badge{fill:var(--red);}
+    .graph .pill-r{fill:var(--red);}
+    .graph .pill-t{font-family:'DM Sans',sans-serif;font-weight:700;font-size:14px;letter-spacing:1px;fill:#fff;}
+    .graph .badge-t{font-family:'DM Mono',monospace;font-weight:500;font-size:18px;fill:#fff;}
+
+    /* ═══ CODE SLIDES (.codeslide) ═══ */
+    .codeslide{grid-template-rows:auto 1fr;background:radial-gradient(ellipse at 85% 15%,rgba(27,49,57,0.05) 0%,var(--bg) 60%);}
+    .codeslide .top{padding:1.3rem 4rem 0.8rem;border-bottom:1px solid var(--border);}
+    .codeslide .top h1{font-size:clamp(2.2rem,3.4vw,3.4rem);margin-bottom:0.4rem;}
+    .codeslide .top .lead{font-size:clamp(1rem,1.2vw,1.4rem);max-width:110ch;line-height:1.45;}
+    .codeslide .lead code,.codeslide .step p code{font-family:'DM Mono',monospace;font-size:0.9em;color:var(--red);}
+    .codeslide .cols{min-height:0;display:grid;gap:clamp(1.2rem,2vw,2.4rem);padding:clamp(0.8rem,1.8vh,1.6rem) 4rem clamp(0.8rem,1.8vh,1.6rem);}
+    .codeslide .cols.two{grid-template-columns:1fr 1fr;}
+    .codeslide .cols.engine{grid-template-columns:minmax(0,0.62fr) minmax(0,1.38fr);}
+    .codeslide .step{min-height:0;min-width:0;display:flex;flex-direction:column;gap:0.45rem;}
+    .codeslide .step h3{font-size:clamp(1.2rem,1.45vw,1.7rem);font-weight:700;letter-spacing:-0.4px;color:var(--navy);}
+    .codeslide .step p{font-size:clamp(0.92rem,1.02vw,1.2rem);color:var(--text2);line-height:1.45;max-width:70ch;}
+    .codeslide .meta{display:flex;gap:0.5rem;flex-wrap:wrap;}
+    .box-chip{font-size:clamp(0.78rem,0.85vw,0.98rem);font-weight:600;color:var(--red);background:var(--red-dim);border:1px solid rgba(255,54,33,0.25);border-radius:999px;padding:0.2rem 0.75rem;}
+    .path-chip{font-family:'DM Mono',monospace;font-size:clamp(0.74rem,0.8vw,0.92rem);color:var(--text2);background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:0.2rem 0.75rem;}
+    .codeslide pre.code{flex:1;min-height:0;overflow:hidden;margin:0.2rem 0 0;padding:clamp(0.8rem,1.4vh,1.2rem) clamp(0.9rem,1.1vw,1.3rem);background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--red);border-radius:var(--r);font:clamp(0.68rem,0.82vw,0.98rem)/1.55 'DM Mono',monospace;color:var(--navy);white-space:pre-wrap;}
+    .codeslide pre.code .c,.codeslide pre.code .c1,.codeslide pre.code .cm,.codeslide pre.code .sd{color:var(--text3);font-style:italic;}
+    .codeslide pre.code .k,.codeslide pre.code .kc,.codeslide pre.code .kn,.codeslide pre.code .kd,.codeslide pre.code .ow,.codeslide pre.code .nt{color:var(--navy);font-weight:600;}
+    .codeslide pre.code .nf,.codeslide pre.code .fm,.codeslide pre.code .nd{color:var(--red);}
+    .codeslide pre.code .s,.codeslide pre.code .s1,.codeslide pre.code .s2,.codeslide pre.code .sa,.codeslide pre.code .si,.codeslide pre.code .se,.codeslide pre.code .sr,.codeslide pre.code .mi,.codeslide pre.code .mf{color:var(--blue);}
+    .codeslide pre.code .nb,.codeslide pre.code .bp{color:var(--navy-900);}
+    .codeslide .cols.rows{grid-template-rows:1fr 1fr;grid-template-columns:1fr;gap:clamp(0.7rem,1.4vh,1.2rem);}
+    .srow{min-height:0;display:grid;grid-template-columns:minmax(0,0.5fr) minmax(0,1fr) minmax(0,1fr);gap:clamp(0.8rem,1.2vw,1.4rem);border-top:1px solid var(--border);padding-top:clamp(0.5rem,1vh,0.9rem);}
+    .srow:first-child{border-top:none;padding-top:0;}
+    .sdesc{min-width:0;display:flex;flex-direction:column;gap:0.35rem;}
+    .snum{width:clamp(28px,2.2vw,36px);height:clamp(28px,2.2vw,36px);border-radius:50%;background:var(--red);color:#fff;font-family:'DM Mono',monospace;font-weight:500;font-size:clamp(0.85rem,1vw,1.1rem);display:flex;align-items:center;justify-content:center;}
+    .sdesc h3{font-size:clamp(1.15rem,1.4vw,1.65rem);font-weight:700;letter-spacing:-0.4px;color:var(--navy);}
+    .sdesc p{font-size:clamp(0.82rem,0.92vw,1.08rem);color:var(--text2);line-height:1.4;}
+    .sbul{list-style:none;display:flex;flex-direction:column;gap:0.35rem;margin-top:0.15rem;}
+    .sbul li{font-size:clamp(0.78rem,0.86vw,1rem);color:var(--text2);line-height:1.35;}
+    .sbul li b{display:block;color:var(--red);font-weight:600;}
+    .sbul li code{font-family:'DM Mono',monospace;font-size:0.9em;color:var(--red);}
+    .blk{min-width:0;min-height:0;display:flex;flex-direction:column;gap:0.35rem;}
+    .blk-t{font-size:clamp(0.82rem,0.92vw,1.08rem);color:var(--navy);margin-right:0.2rem;}
+    .codeslide .meta{align-items:center;}
+    .codeslide .srow pre.code{font-size:clamp(0.6rem,0.72vw,0.9rem);line-height:1.45;padding:clamp(0.5rem,1vh,0.9rem) clamp(0.7rem,0.9vw,1.1rem);margin:0;}
+    .codeslide:has(.cols.rows) .top{padding:0.9rem 4rem 0.55rem;}
+    .codeslide:has(.cols.rows) .top h1{font-size:clamp(1.8rem,2.7vw,2.8rem);margin-bottom:0;}
+    .codeslide:has(.cols.rows) .top .ch-label{margin-bottom:0.3rem;}
+    .codeslide .cols.rows{padding-top:clamp(0.5rem,1.1vh,1rem);padding-bottom:clamp(0.5rem,1.1vh,1rem);}
+    .blk .meta{flex-wrap:nowrap;white-space:nowrap;overflow:hidden;}
+    .blk .meta .path-chip{min-width:0;overflow:hidden;text-overflow:ellipsis;}
+    .sdesc{overflow:hidden;}
+    .snum{flex-shrink:0;}
+    .stages{list-style:none;display:flex;flex-direction:column;gap:0.6rem;margin:0.4rem 0 0.6rem;}
+    .stages li{display:flex;gap:0.8rem;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:0.55rem 0.9rem;}
+    .stages li b{flex-shrink:0;width:clamp(28px,2.2vw,36px);height:clamp(28px,2.2vw,36px);border-radius:50%;background:var(--navy);color:#fff;font-family:'DM Mono',monospace;font-size:clamp(0.85rem,1vw,1.1rem);display:flex;align-items:center;justify-content:center;}
+    .stages li span{font-weight:700;font-size:clamp(0.98rem,1.1vw,1.3rem);color:var(--navy);display:flex;flex-direction:column;}
+    .stages li small{font-weight:500;font-size:clamp(0.8rem,0.9vw,1.02rem);color:var(--red);}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <svg class="dbx-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><path d="M1.155,4.93v.512L9,9.868l7.006-3.957,0,1.6L9,11.491,1.55,7.258l-.395.22V10.54L9,14.955l7.006-3.942,0,1.586L9,16.581,1.55,12.347l-.395.22v.519L9,17.5l7.845-4.414V10.021l-.4-.218L9,14.036,1.992,10.054V8.476L9,12.414,16.845,8V4.978l-.4-.219L9,8.993,2.352,5.215,9,1.46l5.476,3.094.479-.269V3.863L9,.5Z" fill="#ff3621"/></svg>
+    <span class="dbx-word">databricks</span>
+    <div class="nav-sep"></div>
+    <span class="nav-title">Example <em>Agent</em> Agent</span>
+    <div class="nav-sep"></div>
+    <span class="nav-sub">Example · logical architecture</span>
+  </div>
+  <div class="nav-dots" id="navDots"></div>
+</nav>
+
+<div id="slideNav">
+  <button class="snav" id="navPrev" title="Previous slide" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
+  <button class="snav" id="navNext" title="Next slide" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+</div>
+
+<section class="slide" id="sarch2">
+  <div class="top">
+    <div class="ch-label">Proposed · 5 / 5</div>
+    <h1>Policy <span class="red">Q&amp;A</span> agent</h1>
+    <p class="lead">Proposed. An employee asks a policy question in a Databricks App. A LangGraph agent lets the LLM choose tools in a loop: Genie for structured HR data, AI Search for the policy text, Unity Catalog functions for governed lookups, MCP servers for external systems. Tools run with the user's permissions and every step is traced.</p>
+  </div>
+  <div class="body">
+    <svg class="graph" viewBox="0 0 1600 790" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8a9aa1"/>
+        </marker>
+      </defs>
+
+      <!-- governance & observability band -->
+      <rect class="band" x="40" y="648" width="1520" height="136" rx="18"/>
+      <text class="band-lbl" x="66" y="676">GOVERNANCE &amp; OBSERVABILITY</text>
+
+      <!-- ── edges ── -->
+      <!-- Employee ⇅ App -->
+      <line class="edge" x1="770" y1="94"  x2="770" y2="168" marker-end="url(#ah2)"/>
+      <line class="edge" x1="830" y1="170" x2="830" y2="96"  marker-end="url(#ah2)"/>
+      <text class="lbl" x="752" y="138" text-anchor="end">asks a question</text>
+      <text class="lbl" x="848" y="138">answer + sources</text>
+
+      <!-- App ⇅ Agent -->
+      <line class="edge" x1="770" y1="254" x2="770" y2="338" marker-end="url(#ah2)"/>
+      <line class="edge" x1="830" y1="340" x2="830" y2="256" marker-end="url(#ah2)"/>
+      <text class="lbl" x="752" y="303" text-anchor="end">question + user identity</text>
+      <text class="lbl" x="848" y="303">streamed answer</text>
+
+      <!-- Agent ⇄ LLM (reasoning loop) -->
+      <line class="edge" x1="638" y1="372" x2="434" y2="372" marker-end="url(#ah2)"/>
+      <line class="edge" x1="432" y1="406" x2="636" y2="406" marker-end="url(#ah2)"/>
+      <text class="lbl" x="535" y="358" text-anchor="middle">messages + tools</text>
+      <text class="lbl" x="535" y="432" text-anchor="middle">next tool call or answer</text>
+      <rect class="pill-r" x="505" y="378" width="60" height="22" rx="11"/>
+      <text class="pill-t" x="535" y="394" text-anchor="middle">LOOP</text>
+
+      <!-- Agent ⇄ tools (fan-out) -->
+      <line class="edge" x1="962" y1="356" x2="1164" y2="233" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+      <line class="edge" x1="962" y1="376" x2="1164" y2="333" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+      <line class="edge" x1="962" y1="400" x2="1164" y2="433" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+      <line class="edge" x1="962" y1="420" x2="1164" y2="533" marker-start="url(#ah2)" marker-end="url(#ah2)"/>
+      <text class="lbl" x="1072" y="252" text-anchor="middle">tool calls</text>
+      <text class="lbl" x="1040" y="512" text-anchor="middle">results</text>
+
+      <!-- Agent ⇅ memory -->
+      <line class="edge" x1="770" y1="438" x2="770" y2="518" marker-end="url(#ah2)"/>
+      <line class="edge" x1="830" y1="520" x2="830" y2="440" marker-end="url(#ah2)"/>
+      <text class="lbl" x="752" y="485" text-anchor="end">save thread</text>
+      <text class="lbl" x="848" y="485">load thread</text>
+
+      <!-- observability / governance -->
+      <line class="edge dash" x1="640" y1="438" x2="330" y2="692" marker-end="url(#ah2)"/>
+      <text class="lbl" x="470" y="548" text-anchor="end">traces every step</text>
+      <line class="edge dash" x1="1338" y1="572" x2="1338" y2="692" marker-end="url(#ah2)"/>
+      <text class="lbl" x="1356" y="638">governed by UC</text>
+
+      <!-- ── nodes ── -->
+      <g class="node"><rect x="660" y="10" width="280" height="84" rx="14"/>
+        <use href="#ico-user" x="684" y="33" width="34" height="34"/>
+        <text class="t" x="734" y="47">Employee</text><text class="s" x="734" y="72">Databricks SSO</text></g>
+
+      <g class="node"><rect x="660" y="170" width="280" height="84" rx="14"/>
+        <use href="#ico-monitor" x="684" y="193" width="34" height="34"/>
+        <text class="t" x="734" y="207">Assistant App</text><text class="s" x="734" y="232">Databricks Apps</text></g>
+
+      <g class="node agent"><rect x="640" y="340" width="320" height="96" rx="16"/>
+        <use href="#ico-cpu" x="666" y="370" width="36" height="36"/>
+        <text class="t" x="718" y="381">Q&amp;A Agent</text><text class="s" x="718" y="407">LangGraph · ResponsesAgent</text></g>
+
+      <g class="node"><rect x="92" y="346" width="340" height="84" rx="14"/>
+        <use href="#ico-message" x="116" y="369" width="34" height="34"/>
+        <text class="t" x="166" y="383">LLM (Claude)</text><text class="s" x="166" y="408">Foundation Model APIs</text></g>
+
+      <g class="node"><rect x="1168" y="196" width="340" height="74" rx="14"/>
+        <use href="#ico-chart" x="1192" y="216" width="32" height="32"/>
+        <text class="t" x="1242" y="228">Genie space</text><text class="s" x="1242" y="253">text-to-SQL on UC tables</text></g>
+
+      <g class="node"><rect x="1168" y="296" width="340" height="74" rx="14"/>
+        <use href="#ico-search" x="1192" y="316" width="32" height="32"/>
+        <text class="t" x="1242" y="328">AI Search</text><text class="s" x="1242" y="353">Vector Search index</text></g>
+
+      <g class="node"><rect x="1168" y="396" width="340" height="74" rx="14"/>
+        <use href="#ico-target" x="1192" y="416" width="32" height="32"/>
+        <text class="t" x="1242" y="428">UC functions</text><text class="s" x="1242" y="453">governed Python / SQL tools</text></g>
+
+      <g class="node"><rect x="1168" y="496" width="340" height="74" rx="14"/>
+        <use href="#ico-database" x="1192" y="516" width="32" height="32"/>
+        <text class="t" x="1242" y="528">MCP servers</text><text class="s" x="1242" y="553">managed + external MCP</text></g>
+
+      <g class="node"><rect x="630" y="520" width="340" height="84" rx="14"/>
+        <use href="#ico-database" x="654" y="543" width="34" height="34"/>
+        <text class="t" x="704" y="557">Conversation memory</text><text class="s" x="704" y="582">Lakebase checkpointer</text></g>
+
+      <g class="node"><rect x="92" y="694" width="340" height="78" rx="14"/>
+        <use href="#ico-chart" x="116" y="716" width="34" height="34"/>
+        <text class="t" x="166" y="728">MLflow</text><text class="s" x="166" y="752">Tracing + GenAI Evaluation</text></g>
+
+      <g class="node"><rect x="1168" y="694" width="340" height="78" rx="14"/>
+        <use href="#ico-check" x="1192" y="716" width="34" height="34"/>
+        <text class="t" x="1242" y="728">Unity Catalog</text><text class="s" x="1242" y="752">permissions · lineage · audit</text></g>
+    </svg>
+  </div>
+</section>
+
+<section class="slide" id="scycle">
+  <style>
+    #scycle{grid-template-rows:auto 1fr;background:radial-gradient(ellipse at 50% 45%,rgba(255,54,33,0.05) 0%,var(--bg) 60%);}
+    #scycle .top{padding:1.4rem 4rem 0.9rem;border-bottom:1px solid var(--border);}
+    #scycle .top h1{font-size:clamp(2.4rem,3.8vw,3.8rem);margin-bottom:0.5rem;}
+    #scycle .top .lead{font-size:clamp(1.05rem,1.3vw,1.5rem);max-width:96ch;line-height:1.45;}
+    #scycle .body{min-height:0;padding:clamp(0.6rem,1.4vh,1.4rem) clamp(2rem,4vw,5rem) clamp(0.8rem,1.6vh,1.6rem);display:flex;}
+    #scycle svg.graph{width:100%;height:100%;display:block;}
+  </style>
+  <style>
+    #scycle .body{flex-direction:column;gap:clamp(0.5rem,1.2vh,1rem);}
+    #scycle svg.graph{flex:1 1 0;min-height:0;}
+    #scycle .dt-grid{flex:0 0 auto;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0.6rem 1.4rem;padding-right:3.5rem;}
+    .dt-block{min-width:0;}
+    .dt-h{font-size:clamp(0.62rem,0.7vw,0.85rem);font-weight:700;letter-spacing:2px;color:var(--text3);margin-bottom:0.2rem;}
+    .dt{width:100%;border-collapse:collapse;background:var(--surface);border:1px solid var(--border);font-size:clamp(0.6rem,min(1.25vh,0.72vw),0.9rem);line-height:1.3;}
+    .dt td{padding:0.22em 0.6em;border-top:1px solid var(--border);vertical-align:top;color:var(--text2);}
+    .dt tr:first-child td{border-top:none;}
+    .dt .dt-n{width:1.8em;font-family:'DM Mono',monospace;color:var(--red);}
+    .dt .dt-t{width:30%;font-weight:700;color:var(--navy);}
+  </style>
+  <div class="top">
+    <div class="ch-label">Cycle de vie</div>
+    <h1>Cycle de vie d'un <span class="red">projet agentique</span></h1>
+    <p class="lead">Dix-huit étapes, du cadrage au run, regroupées en cinq phases.</p>
+  </div>
+  <div class="body">
+    <svg class="graph" viewBox="0 0 2000 788" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+          <path d="M0,0 L10,5 L0,10 z" fill="#8a9aa1"/>
+        </marker>
+      </defs>
+      <rect class="band" x="40" y="8" width="1920" height="144" rx="18"/>
+      <text class="band-lbl" x="66" y="38">CADRAGE</text>
+      <g class="node"><rect x="64" y="54" width="435" height="74" rx="14"/><circle class="badge" cx="98" cy="91" r="17"/><text class="badge-t" x="98" y="97" text-anchor="middle">1</text><text class="t" x="126" y="99">Cadrage</text></g>
+      <g class="node"><rect x="543" y="54" width="435" height="74" rx="14"/><circle class="badge" cx="577" cy="91" r="17"/><text class="badge-t" x="577" y="97" text-anchor="middle">2</text><text class="t" x="605" y="99">Discovery data et systèmes</text></g>
+      <g class="node"><rect x="1022" y="54" width="435" height="74" rx="14"/><circle class="badge" cx="1056" cy="91" r="17"/><text class="badge-t" x="1056" y="97" text-anchor="middle">3</text><text class="t" x="1084" y="99">Baseline</text></g>
+      <g class="node"><rect x="1501" y="54" width="435" height="74" rx="14"/><circle class="badge" cx="1535" cy="91" r="17"/><text class="badge-t" x="1535" y="97" text-anchor="middle">4</text><text class="t" x="1563" y="99">Golden dataset</text></g>
+      <line class="edge" x1="501" y1="91" x2="541" y2="91" marker-end="url(#ah3)"/>
+      <line class="edge" x1="980" y1="91" x2="1020" y2="91" marker-end="url(#ah3)"/>
+      <line class="edge" x1="1459" y1="91" x2="1499" y2="91" marker-end="url(#ah3)"/>
+      <rect class="band" x="40" y="164" width="1920" height="144" rx="18"/>
+      <text class="band-lbl" x="66" y="194">BUILD</text>
+      <g class="node"><rect x="64" y="210" width="275" height="74" rx="14"/><circle class="badge" cx="98" cy="247" r="17"/><text class="badge-t" x="98" y="253" text-anchor="middle">5</text><text class="t" x="126" y="255">Design</text></g>
+      <g class="node"><rect x="383" y="210" width="275" height="74" rx="14"/><circle class="badge" cx="417" cy="247" r="17"/><text class="badge-t" x="417" y="253" text-anchor="middle">6</text><text class="t" x="445" y="255">Tools</text></g>
+      <g class="node"><rect x="703" y="210" width="275" height="74" rx="14"/><circle class="badge" cx="737" cy="247" r="17"/><text class="badge-t" x="737" y="253" text-anchor="middle">7</text><text class="t" x="765" y="255">RAG</text></g>
+      <g class="node"><rect x="1022" y="210" width="275" height="74" rx="14"/><circle class="badge" cx="1056" cy="247" r="17"/><text class="badge-t" x="1056" y="253" text-anchor="middle">8</text><text class="t" x="1084" y="255">Prompt engineering</text></g>
+      <g class="node"><rect x="1341" y="210" width="275" height="74" rx="14"/><circle class="badge" cx="1375" cy="247" r="17"/><text class="badge-t" x="1375" y="253" text-anchor="middle">9</text><text class="t" x="1403" y="255">Orchestration</text></g>
+      <g class="node"><rect x="1661" y="210" width="275" height="74" rx="14"/><circle class="badge" cx="1695" cy="247" r="17"/><text class="badge-t" x="1695" y="253" text-anchor="middle">10</text><text class="t" x="1723" y="255">Guardrails</text></g>
+      <line class="edge" x1="341" y1="247" x2="381" y2="247" marker-end="url(#ah3)"/>
+      <line class="edge" x1="661" y1="247" x2="701" y2="247" marker-end="url(#ah3)"/>
+      <line class="edge" x1="980" y1="247" x2="1020" y2="247" marker-end="url(#ah3)"/>
+      <line class="edge" x1="1299" y1="247" x2="1339" y2="247" marker-end="url(#ah3)"/>
+      <line class="edge" x1="1619" y1="247" x2="1659" y2="247" marker-end="url(#ah3)"/>
+      <rect class="band" x="40" y="320" width="1920" height="144" rx="18"/>
+      <text class="band-lbl" x="66" y="350">ÉVALUATION</text>
+      <g class="node agent"><rect x="330" y="366" width="520" height="74" rx="14"/><circle class="badge" cx="364" cy="403" r="17"/><text class="badge-t" x="364" y="409" text-anchor="middle">11</text><text class="t" x="392" y="411">Offline evaluation</text></g>
+      <g class="node agent"><rect x="1150" y="366" width="520" height="74" rx="14"/><circle class="badge" cx="1184" cy="403" r="17"/><text class="badge-t" x="1184" y="409" text-anchor="middle">12</text><text class="t" x="1212" y="411">Error analysis et itération</text></g>
+      <line class="edge" x1="852" y1="383" x2="1148" y2="383" marker-end="url(#ah3)"/>
+      <line class="edge" x1="1148" y1="423" x2="852" y2="423" marker-end="url(#ah3)"/>
+      <rect class="pill-r" x="970" y="392" width="60" height="22" rx="11"/><text class="pill-t" x="1000" y="408" text-anchor="middle">LOOP</text>
+      <rect class="band" x="40" y="476" width="1920" height="144" rx="18"/>
+      <text class="band-lbl" x="66" y="506">MISE EN PRODUCTION</text>
+      <g class="node"><rect x="64" y="522" width="595" height="74" rx="14"/><circle class="badge" cx="98" cy="559" r="17"/><text class="badge-t" x="98" y="565" text-anchor="middle">13</text><text class="t" x="126" y="567">Shadow mode</text></g>
+      <g class="node"><rect x="703" y="522" width="595" height="74" rx="14"/><circle class="badge" cx="737" cy="559" r="17"/><text class="badge-t" x="737" y="565" text-anchor="middle">14</text><text class="t" x="765" y="567">Pilote</text></g>
+      <g class="node"><rect x="1341" y="522" width="595" height="74" rx="14"/><circle class="badge" cx="1375" cy="559" r="17"/><text class="badge-t" x="1375" y="565" text-anchor="middle">15</text><text class="t" x="1403" y="567">Déploiement progressif</text></g>
+      <line class="edge" x1="661" y1="559" x2="701" y2="559" marker-end="url(#ah3)"/>
+      <line class="edge" x1="1299" y1="559" x2="1339" y2="559" marker-end="url(#ah3)"/>
+      <rect class="band" x="40" y="632" width="1920" height="144" rx="18"/>
+      <text class="band-lbl" x="66" y="662">RUN</text>
+      <g class="node"><rect x="64" y="678" width="595" height="74" rx="14"/><circle class="badge" cx="98" cy="715" r="17"/><text class="badge-t" x="98" y="721" text-anchor="middle">16</text><text class="t" x="126" y="723">Monitoring de production</text></g>
+      <g class="node"><rect x="703" y="678" width="595" height="74" rx="14"/><circle class="badge" cx="737" cy="715" r="17"/><text class="badge-t" x="737" y="721" text-anchor="middle">17</text><text class="t" x="765" y="723">Continuous evaluation</text></g>
+      <g class="node"><rect x="1341" y="678" width="595" height="74" rx="14"/><circle class="badge" cx="1375" cy="715" r="17"/><text class="badge-t" x="1375" y="721" text-anchor="middle">18</text><text class="t" x="1403" y="723">Run et gouvernance</text></g>
+      <line class="edge" x1="661" y1="715" x2="701" y2="715" marker-end="url(#ah3)"/>
+      <line class="edge" x1="1299" y1="715" x2="1339" y2="715" marker-end="url(#ah3)"/>
+    </svg>
+    <div class="dt-grid"><div class="dt-block"><div class="dt-h">CADRAGE</div><table class="dt"><tbody><tr><td class="dt-n">1</td><td class="dt-t">Cadrage</td><td>Le problème métier, le KPI cible, le périmètre, l'owner métier.</td></tr><tr><td class="dt-n">2</td><td class="dt-t">Discovery data et systèmes</td><td>Les sources, les API existantes, les accès, la qualité des données.</td></tr><tr><td class="dt-n">3</td><td class="dt-t">Baseline</td><td>La performance actuelle du process ou des humains, comme point de comparaison.</td></tr><tr><td class="dt-n">4</td><td class="dt-t">Golden dataset</td><td>De vrais cas avec leur réponse attendue, labellisés par les métiers.</td></tr></tbody></table></div><div class="dt-block"><div class="dt-h">BUILD</div><table class="dt"><tbody><tr><td class="dt-n">5</td><td class="dt-t">Design</td><td>Agent unique ou multi-agent, workflow, choix du modèle, points de validation humaine (human-in-the-loop).</td></tr><tr><td class="dt-n">6</td><td class="dt-t">Tools</td><td>Les connecteurs et les API (MCP), avec les permissions de chaque action.</td></tr><tr><td class="dt-n">7</td><td class="dt-t">RAG</td><td>Indexation des documents et des procédures, chunking, retrieval.</td></tr><tr><td class="dt-n">8</td><td class="dt-t">Prompt engineering</td><td>Les instructions système et les règles métier, écrites en langage naturel.</td></tr><tr><td class="dt-n">9</td><td class="dt-t">Orchestration</td><td>L'enchaînement des étapes, la mémoire, la gestion des erreurs et des escalades.</td></tr><tr><td class="dt-n">10</td><td class="dt-t">Guardrails</td><td>Les filtres en entrée et en sortie, les données personnelles, les seuils d'action.</td></tr></tbody></table></div><div class="dt-block"><div class="dt-h">ÉVALUATION</div><table class="dt"><tbody><tr><td class="dt-n">11</td><td class="dt-t">Offline evaluation</td><td>Passage sur le golden dataset : précision, groundedness, latence, coût. LLM-as-judge et revue humaine.</td></tr><tr><td class="dt-n">12</td><td class="dt-t">Error analysis et itération</td><td>Classement des erreurs, ajustement des prompts, des tools, du retrieval ou du modèle, puis nouvelle évaluation.</td></tr></tbody></table></div><div class="dt-block"><div class="dt-h">MISE EN PRODUCTION</div><table class="dt"><tbody><tr><td class="dt-n">13</td><td class="dt-t">Shadow mode</td><td>L'agent tourne sur des cas réels et propose. L'humain décide, et on compare les deux.</td></tr><tr><td class="dt-n">14</td><td class="dt-t">Pilote</td><td>Un panel restreint d'utilisateurs ou de clients, avec leurs feedbacks.</td></tr><tr><td class="dt-n">15</td><td class="dt-t">Déploiement progressif</td><td>Canary release, feature flags, rollback possible.</td></tr></tbody></table></div><div class="dt-block"><div class="dt-h">RUN</div><table class="dt"><tbody><tr><td class="dt-n">16</td><td class="dt-t">Monitoring de production</td><td>Traces, coût, latence, dérive, feedback des utilisateurs.</td></tr><tr><td class="dt-n">17</td><td class="dt-t">Continuous evaluation</td><td>Échantillons relus, nouveaux cas ajoutés au golden dataset, regression tests à chaque changement de modèle ou de prompt.</td></tr><tr><td class="dt-n">18</td><td class="dt-t">Run et gouvernance</td><td>Versioning des prompts et des modèles, audit, ownership de l'agent en production.</td></tr></tbody></table></div></div>
+  </div>
+</section>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dotsEl = document.getElementById('navDots');
+  const prevBtn = document.getElementById('navPrev');
+  const nextBtn = document.getElementById('navNext');
+  let current = 0;
+  slides.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot'; d.title = `Slide ${i + 1}`;
+    d.onclick = () => s.scrollIntoView({ behavior: 'smooth' });
+    dotsEl.appendChild(d);
+  });
+  const dots = [...document.querySelectorAll('.dot')];
+  const go = i => slides[Math.max(0, Math.min(i, slides.length - 1))].scrollIntoView({ behavior: 'smooth' });
+  function update(){
+    dots.forEach((d, j) => d.classList.toggle('on', j === current));
+    if (prevBtn) prevBtn.disabled = current === 0;
+    if (nextBtn) nextBtn.disabled = current === slides.length - 1;
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting){ current = slides.indexOf(e.target); update(); } });
+  }, { threshold: 0.5 });
+  slides.forEach(s => observer.observe(s));
+  if (prevBtn) prevBtn.onclick = () => go(current - 1);
+  if (nextBtn) nextBtn.onclick = () => go(current + 1);
+  update();
+  // keyboard ↑ / ↓ do the same as the arrow buttons (one slide per hit)
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select,[contenteditable]')) return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  });
+</script>
+
+</body>
+</html>

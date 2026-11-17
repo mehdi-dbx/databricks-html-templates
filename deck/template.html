@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Deck Title</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 18'%3E%3Cpath d='M1.155,4.93v.512L9,9.868l7.006-3.957,0,1.6L9,11.491,1.55,7.258l-.395.22V10.54L9,14.955l7.006-3.942,0,1.586L9,16.581,1.55,12.347l-.395.22v.519L9,17.5l7.845-4.414V10.021l-.4-.218L9,14.036,1.992,10.054V8.476L9,12.414,16.845,8V4.978l-.4-.219L9,8.993,2.352,5.215,9,1.46l5.476,3.094.479-.269V3.863L9,.5Z' fill='%23FF3621'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&family=DM+Mono:wght@400;500&family=Geist:wght@400;500;600&display=swap" rel="stylesheet">
+
+  <svg style="display:none" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="ico-user"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></symbol>
+    <symbol id="ico-users"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></symbol>
+    <symbol id="ico-database" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+    <symbol id="ico-cpu"      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></symbol>
+    <symbol id="ico-message"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></symbol>
+    <symbol id="ico-layers"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></symbol>
+    <symbol id="ico-tool"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/></symbol>
+    <symbol id="ico-check"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></symbol>
+    <symbol id="ico-package"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 002 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></symbol>
+    <symbol id="ico-chart"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/><line x1="2" y1="20" x2="22" y2="20"/></symbol>
+    <symbol id="ico-clock"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></symbol>
+    <symbol id="ico-globe"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></symbol>
+    <symbol id="ico-target"   viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></symbol>
+    <symbol id="ico-award"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></symbol>
+    <symbol id="ico-trend"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></symbol>
+    <symbol id="ico-flag"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></symbol>
+    <symbol id="ico-arrow"    viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+    <symbol id="ico-monitor"  viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+    <symbol id="ico-map"      viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></symbol>
+    <symbol id="ico-moon"     viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></symbol>
+  </svg>
+
+  <style>
+    /* ═══ DESIGN TOKENS — official Databricks palette ═══ */
+    :root{
+      --bg:#F9F7F4;      --surface:#fff; --surface2:#EEEDE9; --surface3:#e3e1dc;
+      --border:#DCE0E2;  --border2:#c4cacd;
+      --red:#FF3621;     --red-dim:rgba(255,54,33,0.07);
+      --navy:#1B3139;    --navy-dim:rgba(27,49,57,0.06);
+      --navy-900:#0B2026;
+      --blue:#2272B4;    --blue-dim:rgba(34,114,180,0.08);
+      --text:#1B3139;    --text2:#3B4F57; --text3:#687A81;
+      --nav-h:52px; --r:12px; --r-lg:18px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-snap-type:y mandatory;overflow-y:scroll;}
+    body{font-family:'DM Sans',-apple-system,sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+
+    /* ═══ NAV ═══ */
+    nav{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--nav-h);background:rgba(255,255,255,0.96);backdrop-filter:blur(16px);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 2.5rem;}
+    .nav-left{display:flex;align-items:center;gap:0.75rem;}
+    .dbx-mark{width:28px;height:28px;}
+    .dbx-word{font-weight:800;font-size:clamp(1.15rem,1.4vw,1.55rem);letter-spacing:-0.6px;color:var(--text);}
+    .nav-title{font-weight:700;font-size:clamp(1.1rem,1.3vw,1.5rem);letter-spacing:-0.3px;}
+    .nav-title em{color:var(--red);font-style:normal;}
+    .nav-sep{width:1px;height:16px;background:var(--border);}
+    .nav-sub{font-size:clamp(0.95rem,1.1vw,1.25rem);color:var(--text3);}
+    .nav-dots{display:flex;align-items:center;gap:6px;}
+    .dot{width:7px;height:7px;border-radius:50%;background:var(--border2);cursor:pointer;transition:background .2s,transform .2s;}
+    .dot.on{background:var(--red);transform:scale(1.45);}
+    /* previous / next slide arrows — stacked on the right edge */
+    #slideNav{position:fixed;right:clamp(10px,1.4vw,22px);top:50%;transform:translateY(-50%);z-index:110;display:flex;flex-direction:column;gap:10px;}
+    .snav{width:46px;height:46px;border-radius:50%;background:var(--surface);border:1.5px solid var(--border2);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text2);box-shadow:0 2px 10px rgba(0,0,0,0.08);transition:color .2s,border-color .2s,box-shadow .2s,opacity .2s;padding:0;}
+    .snav:hover{color:var(--red);border-color:var(--red);box-shadow:0 4px 16px rgba(0,0,0,0.14);}
+    .snav svg{width:22px;height:22px;}
+    .snav[disabled]{opacity:0.28;pointer-events:none;box-shadow:none;}
+
+    /* ═══ SLIDE BASE ═══ */
+    .slide{height:100vh;scroll-snap-align:start;display:grid;padding-top:var(--nav-h);overflow:hidden;}
+    .ch-label{font-size:clamp(0.8rem,0.95vw,1.05rem);font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:0.6rem;}
+    .ch-label-navy{color:var(--navy);}
+    h1{font-family:'Geist',-apple-system,sans-serif;font-size:clamp(3.2rem,5vw,5rem);font-weight:500;letter-spacing:-1px;line-height:1.05;margin-bottom:1.2rem;}
+    .lead{font-size:clamp(1.3rem,1.55vw,1.85rem);color:var(--text2);line-height:1.6;max-width:46ch;}
+    .red{color:var(--red);}
+    .k{color:var(--red);font-weight:700;}
+    .top{padding:1.6rem 4rem 1rem;border-bottom:1px solid var(--border);}
+    .top h1{font-size:clamp(2.6rem,4.4vw,4.2rem);margin-bottom:0.6rem;}
+    .top .lead{font-size:clamp(1.1rem,1.35vw,1.55rem);max-width:92ch;}
+
+    /* ═══ CARDS ═══ */
+    .card{background:var(--surface);border:1px solid var(--border);border-top:3px solid var(--navy);border-radius:var(--r-lg);padding:clamp(1rem,1.6vh,1.8rem) clamp(1.2rem,1.5vw,1.9rem);transition:box-shadow .2s;}
+    .card:hover{box-shadow:0 4px 20px rgba(0,0,0,0.07);}
+    .card h3{font-family:'Geist',-apple-system,sans-serif;font-size:clamp(1.4rem,1.7vw,2.1rem);font-weight:600;margin-bottom:0.45rem;letter-spacing:-0.3px;line-height:1.1;}
+    .card p{font-size:clamp(1.05rem,1.2vw,1.45rem);color:var(--text2);line-height:1.45;}
+    .card p.role{font-family:'DM Mono',monospace;font-size:clamp(0.85rem,0.95vw,1.1rem);color:var(--text3);margin-bottom:0.5rem;}
+    .card-hero{background:var(--surface2);border-top:1px solid var(--border);border-left:3px solid var(--red);}
+    .card-hero::before{content:'';display:block;height:3px;margin:clamp(-1.8rem,-1.6vh,-1rem) clamp(-1.9rem,-1.5vw,-1.2rem) 1.2rem;background:linear-gradient(90deg,var(--red) 0%,transparent 70%);border-radius:var(--r-lg) var(--r-lg) 0 0;}
+
+    /* ═══ ICONS ═══ */
+    .ico{display:block;width:clamp(38px,2.8vw,52px);height:clamp(38px,2.8vw,52px);margin-bottom:0.5rem;}
+    .ico-sm{width:24px;height:24px;} .ico-md{width:40px;height:40px;}
+    .cr{color:var(--red);} .cn{color:var(--navy);} .cm{color:var(--text3);}
+    .ic{background:var(--surface3);border:1px solid var(--border);border-radius:4px;padding:0.08em 0.4em;font-family:'DM Mono',monospace;font-size:0.9em;color:var(--text2);}
+
+    /* ═══ LISTS / PILLS ═══ */
+    .clist{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:0.35rem;}
+    .clist li{display:flex;gap:0.7rem;align-items:flex-start;font-size:clamp(1.02rem,1.15vw,1.4rem);color:var(--text2);line-height:1.38;}
+    .clist li::before{content:'';flex-shrink:0;margin-top:0.6em;width:7px;height:7px;border-radius:50%;background:var(--navy);opacity:0.35;}
+    .pill{display:inline-flex;align-items:center;gap:0.4rem;background:var(--surface2);border:1px solid var(--border);border-radius:999px;padding:0.5rem 1.15rem;font-size:clamp(0.95rem,1.05vw,1.25rem);color:var(--text2);font-weight:500;}
+    .pill-row{display:flex;gap:0.6rem;flex-wrap:wrap;}
+
+    /* ═══ ARCHETYPE A — hero split ═══ */
+    .a-hero{grid-template-columns:1fr 1fr;background:radial-gradient(ellipse at 12% 50%,rgba(255,54,33,0.06) 0%,var(--bg) 60%);}
+    .a-hero .left{display:flex;flex-direction:column;justify-content:center;padding:0 3.5rem 0 5rem;gap:1.5rem;}
+    .a-hero .right{display:flex;flex-direction:column;justify-content:center;padding:0 4.5rem 0 2rem;gap:1rem;border-left:1px solid var(--border);}
+
+    /* ═══ ARCHETYPE B — horizontal flow ═══ */
+    .a-flow{grid-template-rows:auto 1fr;background:radial-gradient(ellipse at 20% 90%,rgba(27,49,57,0.05) 0%,var(--bg) 60%);}
+    .a-flow .body{display:flex;align-items:center;justify-content:center;padding:1.5rem 4rem;gap:clamp(0.3rem,0.6vw,0.8rem);flex-wrap:nowrap;}
+    .flow-col{display:flex;flex-direction:column;align-items:center;gap:0.4rem;}
+    .fbox{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:clamp(1rem,1.6vh,1.9rem) clamp(0.7rem,0.9vw,1.3rem);font-size:clamp(0.95rem,1.15vw,1.4rem);font-weight:700;display:flex;flex-direction:column;align-items:center;gap:0.6rem;width:clamp(108px,10.5vw,190px);height:clamp(190px,26vh,280px);justify-content:center;text-align:center;line-height:1.15;}
+    .fbox small{color:var(--text2);font-size:clamp(0.78rem,0.88vw,1.02rem);font-weight:400;line-height:1.3;}
+    .fbox .tag{font-family:'DM Mono',monospace;font-size:clamp(0.72rem,0.8vw,0.95rem);font-weight:500;color:var(--text3);}
+    .fbox.fa{border-color:var(--red);background:var(--red-dim);}
+    .fbox.fn{border-color:var(--navy);background:var(--navy-dim);}
+    .fbox .ico-md{width:clamp(36px,3vw,52px);height:clamp(36px,3vw,52px);margin-bottom:0;}
+    .farrow{color:var(--border2);display:flex;align-items:center;}
+    .farrow .ico-sm{width:clamp(20px,1.6vw,32px);height:clamp(20px,1.6vw,32px);}
+    .flow-note{grid-column:1/-1;}
+
+    /* ═══ ARCHETYPE C — card grid ═══ */
+    .a-grid{grid-template-rows:auto 1fr;background:radial-gradient(ellipse at 80% 10%,rgba(27,49,57,0.05) 0%,var(--bg) 60%);}
+    .a-grid .grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-auto-rows:auto;align-content:start;align-items:start;gap:1.2rem;padding:1.5rem 4rem;}
+    .a-grid .card .ico{display:inline-block;vertical-align:middle;width:clamp(30px,2.2vw,42px);height:clamp(30px,2.2vw,42px);margin:0 0.6rem 0.35rem 0;}
+    .a-grid .card h3{display:inline;vertical-align:middle;}
+    .a-grid .card h3 + *{margin-top:0.45rem;}
+    .a-grid .grid.cols2{grid-template-columns:repeat(2,minmax(0,max-content));justify-content:start;align-items:stretch;}
+    .a-grid .grid.cols2 .card{max-width:none;}
+    .a-grid .grid.cols2 .clist li{white-space:nowrap;}
+    .a-grid .grid.cols2{padding-right:clamp(4.5rem,5.5vw,6.5rem);}
+    .a-grid .grid.cols3{grid-template-columns:repeat(3,minmax(0,max-content));justify-content:start;align-items:stretch;}
+    .a-grid .grid.cols3 .card{max-width:30rem;}
+    .a-grid .card p.role{margin-top:-0.1rem;}
+    .a-grid .grid.two{grid-template-columns:repeat(2,minmax(0,1fr));}
+
+    /* ═══ ARCHETYPE D — numbered rows ═══ */
+    .a-rows{grid-template-rows:auto 1fr;background:radial-gradient(ellipse at 85% 85%,rgba(27,49,57,0.05) 0%,var(--bg) 60%);}
+    .a-rows .body{display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(0.4rem,0.9vh,0.8rem);padding:clamp(0.8rem,1.6vh,1.5rem) clamp(2.5rem,4vw,5rem);}
+    .play{display:grid;grid-template-columns:clamp(40px,3vw,52px) var(--win,clamp(140px,11vw,200px)) minmax(0,1fr);max-width:62rem;align-items:center;gap:clamp(1rem,1.6vw,1.9rem);background:var(--surface);border:1px solid var(--border);border-left:4px solid var(--navy);border-radius:var(--r);padding:clamp(0.5rem,0.95vh,0.9rem) clamp(1.1rem,1.5vw,1.7rem);}
+    .play.pl-red{border-left-color:var(--red);}
+    .play.pl-muted{border-left-color:var(--border2);background:var(--surface2);}
+    .play-n{width:clamp(34px,2.6vw,46px);height:clamp(34px,2.6vw,46px);border-radius:50%;background:var(--navy);color:#fff;font-weight:800;font-size:clamp(0.85rem,1vw,1.2rem);display:flex;align-items:center;justify-content:center;}
+    .play.pl-red .play-n{background:var(--red);}
+    .play.pl-muted .play-n{background:var(--border2);}
+    .play-body{order:2;}
+    .play-body .pb-t{font-weight:700;font-size:clamp(1.08rem,1.25vw,1.55rem);letter-spacing:-0.4px;line-height:1.12;}
+    .play-body .pb-d{font-size:clamp(0.92rem,1vw,1.22rem);color:var(--text2);line-height:1.35;margin-top:0.15rem;}
+    .play-win{order:1;text-align:left;font-family:'DM Mono',monospace;font-weight:500;font-size:clamp(0.9rem,1.05vw,1.25rem);line-height:1.2;}
+    .play-win b{display:block;font-size:clamp(1.05rem,1.25vw,1.55rem);letter-spacing:-0.5px;color:var(--navy);}
+    .play.pl-red .play-win b{color:var(--red);}
+    .play-win small{color:var(--text3);font-family:'DM Sans',sans-serif;font-size:0.8em;}
+
+
+    .draft{display:inline-block;font-family:'DM Sans',sans-serif;font-size:clamp(0.9rem,1vw,1.15rem);font-weight:500;letter-spacing:0;line-height:1.4;color:var(--text3);border:1px solid var(--border2);border-radius:999px;padding:0.15em 0.7em;vertical-align:middle;margin-left:0.6rem;}
+  
+    /* ═══ ARCHETYPE E — stat tiles + change band ═══ */
+    .a-stats{grid-template-rows:auto 1fr;background:radial-gradient(ellipse at 15% 20%,rgba(255,54,33,0.05) 0%,var(--bg) 60%);}
+    .a-stats .body{display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(1.2rem,2.5vh,2.2rem);padding:clamp(1.4rem,3vh,2.6rem) clamp(3rem,5vw,6rem);}
+    .stat-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.2rem,2vw,2rem);}
+    .stat{border-radius:var(--r-lg);padding:clamp(1.6rem,3vh,2.6rem) clamp(1.4rem,2vw,2.2rem);color:#fff;display:flex;flex-direction:column;gap:0.5rem;text-align:center;align-items:center;}
+    .stat .st-big{font-size:clamp(2.4rem,4.2vw,4.2rem);font-weight:900;letter-spacing:-2px;line-height:1;}
+    .stat .st-lbl{font-size:clamp(1rem,1.2vw,1.45rem);opacity:0.92;line-height:1.3;}
+    .stat.bg-red{background:var(--red);} .stat.bg-navy{background:var(--navy);} .stat.bg-navy2{background:var(--navy-900);}
+    .change-band{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:clamp(1.1rem,2vh,1.8rem) clamp(1.6rem,2.5vw,2.6rem);}
+    .change-band h4{color:var(--red);font-size:clamp(1.05rem,1.2vw,1.4rem);letter-spacing:0.5px;text-transform:uppercase;margin-bottom:0.9rem;}
+    .change-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(1.2rem,2.5vw,2.4rem);}
+    .change-grid .ci-t{font-weight:700;font-size:clamp(1.2rem,1.4vw,1.7rem);margin-bottom:0.25rem;color:var(--navy);}
+    .change-grid .ci-d{font-size:clamp(1rem,1.15vw,1.35rem);color:var(--text2);line-height:1.4;}
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-left">
+    <svg class="dbx-mark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 18"><path d="M1.155,4.93v.512L9,9.868l7.006-3.957,0,1.6L9,11.491,1.55,7.258l-.395.22V10.54L9,14.955l7.006-3.942,0,1.586L9,16.581,1.55,12.347l-.395.22v.519L9,17.5l7.845-4.414V10.021l-.4-.218L9,14.036,1.992,10.054V8.476L9,12.414,16.845,8V4.978l-.4-.219L9,8.993,2.352,5.215,9,1.46l5.476,3.094.479-.269V3.863L9,.5Z" fill="#ff3621"/></svg>
+    <span class="dbx-word">databricks</span>
+    <div class="nav-sep"></div>
+    <span class="nav-title">Deck <em>Name</em></span>
+    <div class="nav-sep"></div>
+    <span class="nav-sub">one-line context</span>
+  </div>
+  <div class="nav-dots" id="navDots"></div>
+</nav>
+
+<div id="slideNav">
+  <button class="snav" id="navPrev" title="Previous slide" aria-label="Previous slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"/></svg></button>
+  <button class="snav" id="navNext" title="Next slide" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
+</div>
+
+<!-- ARCHETYPE A — hero split (.a-hero). Use once, as the opener. -->
+<section class="slide a-hero">
+  <div class="left">
+    <div class="ch-label">Section · 1 / 6</div>
+    <h1>Headline<br>accent</h1>
+    <p class="lead">One or two sentences of framing. Keep it under ~46ch wide.</p>
+    <div class="pill-row"><span class="pill">Tag one</span><span class="pill">Tag two</span><span class="pill">Tag three</span></div>
+  </div>
+  <div class="right">
+    <div class="card card-hero"><svg class="ico cr"><use href="#ico-target"/></svg><h3>Hero point</h3><ul class="clist"><li>Fact from the source</li><li>Fact from the source</li></ul></div>
+    <div class="card"><svg class="ico cn"><use href="#ico-users"/></svg><h3>Second</h3><ul class="clist"><li>Fact from the source</li></ul></div>
+    <div class="card"><svg class="ico cn"><use href="#ico-layers"/></svg><h3>Third</h3><ul class="clist"><li>Fact from the source</li></ul></div>
+  </div>
+</section>
+
+<!-- ARCHETYPE B — horizontal flow (.a-flow). Boxes share one height; .tag = optional mono line (time, phase). -->
+<section class="slide a-flow">
+  <div class="top">
+    <div class="ch-label ch-label-navy">Section · 2 / 6</div>
+    <h1>A flow</h1>
+    <p class="lead">Boxes joined by arrows, read left to right. .fa = the one key box (red), .fn = a distinct step (navy).</p>
+  </div>
+  <div class="body">
+    <div class="flow-col"><div class="fbox"><span class="tag">step 1</span><svg class="ico-md cn"><use href="#ico-user"/></svg>Start<small>origin</small></div></div>
+    <div class="farrow"><svg class="ico-sm cm"><use href="#ico-arrow"/></svg></div>
+    <div class="flow-col"><div class="fbox fa"><span class="tag">step 2</span><svg class="ico-md cr"><use href="#ico-layers"/></svg>Key step<small>the central one</small></div></div>
+    <div class="farrow"><svg class="ico-sm cm"><use href="#ico-arrow"/></svg></div>
+    <div class="flow-col"><div class="fbox"><span class="tag">step 3</span><svg class="ico-md cn"><use href="#ico-cpu"/></svg>Step<small>middle</small></div></div>
+    <div class="farrow"><svg class="ico-sm cm"><use href="#ico-arrow"/></svg></div>
+    <div class="flow-col"><div class="fbox fn"><span class="tag">step 4</span><svg class="ico-md cn"><use href="#ico-check"/></svg>End<small>destination</small></div></div>
+  </div>
+</section>
+
+<!-- ARCHETYPE C — card grid (.a-grid). Cards size to their own text; icon inline with the title. -->
+<section class="slide a-grid">
+  <div class="top">
+    <div class="ch-label ch-label-navy">Section · 3 / 6</div>
+    <h1>A set of items <span class="draft">to confirm</span></h1>
+    <p class="lead">Parallel items. As many bullets as the source gives. p.role = optional mono line under the title (role, status).</p>
+  </div>
+  <div class="grid cols2">
+    <div class="card"><svg class="ico cn"><use href="#ico-users"/></svg><h3>One</h3><p class="role">GA</p><ul class="clist"><li>Fact from the source</li><li>Fact from the source</li></ul></div>
+    <div class="card"><svg class="ico cn"><use href="#ico-layers"/></svg><h3>Two</h3><ul class="clist"><li><span>Fact with inline code <span class="ic">cmd</span> wrapped in a span</span></li></ul></div>
+    <div class="card"><svg class="ico cn"><use href="#ico-globe"/></svg><h3>Three</h3><ul class="clist"><li>Fact from the source</li></ul></div>
+    <div class="card"><svg class="ico cn"><use href="#ico-message"/></svg><h3>Four</h3><ul class="clist"><li>Fact from the source</li></ul></div>
+    <div class="card"><svg class="ico cn"><use href="#ico-tool"/></svg><h3>Five</h3><ul class="clist"><li>Fact from the source</li></ul></div>
+    <div class="card card-hero"><svg class="ico cr"><use href="#ico-trend"/></svg><h3>Six</h3><ul class="clist"><li>Fact from the source</li></ul></div>
+  </div>
+</section>
+
+<!-- ARCHETYPE D — numbered rows (.a-rows). .pl-red = milestone, .pl-muted = break / logistics, default = navy. -->
+<section class="slide a-rows">
+  <div class="top">
+    <div class="ch-label ch-label-navy">Section · 4 / 6</div>
+    <h1>An ordered list</h1>
+    <p class="lead">Numbered or keyed rows, value first (time, deadline, weight, owner). Rows capped in width.</p>
+  </div>
+  <div class="body">
+    <div class="play pl-muted"><div class="play-n">1</div><div class="play-body"><div class="pb-t">Break or logistics</div><div class="pb-d">Detail line</div></div><div class="play-win"><b>08:30</b><small>unit</small></div></div>
+    <div class="play"><div class="play-n">2</div><div class="play-body"><div class="pb-t">Row title</div><div class="pb-d">Detail line</div></div><div class="play-win"><b>value</b><small>unit</small></div></div>
+    <div class="play pl-red"><div class="play-n">C1</div><div class="play-body"><div class="pb-t">Milestone</div><div class="pb-d">Deliverable</div></div><div class="play-win"><b>value</b><small>unit</small></div></div>
+    <div class="play"><div class="play-n">3</div><div class="play-body"><div class="pb-t">Row title</div><div class="pb-d">Detail line</div></div><div class="play-win"><b>value</b></div></div>
+  </div>
+</section>
+
+<!-- ARCHETYPE C variant — two columns (.grid.two) for two contrasted groups -->
+<section class="slide a-grid">
+  <div class="top">
+    <div class="ch-label">Section · 5 / 6</div>
+    <h1>Two groups</h1>
+  </div>
+  <div class="grid two">
+    <div class="card card-hero"><svg class="ico cr"><use href="#ico-trend"/></svg><h3>Group A</h3><ul class="clist"><li>Fact from the source</li><li>Fact from the source</li></ul></div>
+    <div class="card"><svg class="ico cn"><use href="#ico-package"/></svg><h3>Group B</h3><ul class="clist"><li>Fact from the source</li><li>Fact from the source</li></ul></div>
+  </div>
+</section>
+
+<!-- ARCHETYPE E — stat tiles + change band (.a-stats). Only with real numbers from the source. -->
+<section class="slide a-stats">
+  <div class="top">
+    <div class="ch-label ch-label-navy">Section · 6 / 6</div>
+    <h1>The numbers</h1>
+  </div>
+  <div class="body">
+    <div class="stat-row">
+      <div class="stat bg-red"><div class="st-big">00</div><div class="st-lbl">metric one</div></div>
+      <div class="stat bg-navy"><div class="st-big">00</div><div class="st-lbl">metric two</div></div>
+      <div class="stat bg-navy2"><div class="st-big">00</div><div class="st-lbl">metric three</div></div>
+    </div>
+    <div class="change-band">
+      <h4>Supporting band</h4>
+      <div class="change-grid">
+        <div><div class="ci-t">Point one</div><div class="ci-d">Short supporting sentence.</div></div>
+        <div><div class="ci-t">Point two</div><div class="ci-d">Short supporting sentence.</div></div>
+        <div><div class="ci-t">Point three</div><div class="ci-d">Short supporting sentence.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const slides = [...document.querySelectorAll('.slide')];
+  const dotsEl = document.getElementById('navDots');
+  const prevBtn = document.getElementById('navPrev');
+  const nextBtn = document.getElementById('navNext');
+  let current = 0;
+  slides.forEach((s, i) => {
+    const d = document.createElement('div');
+    d.className = 'dot'; d.title = `Slide ${i + 1}`;
+    d.onclick = () => s.scrollIntoView({ behavior: 'smooth' });
+    dotsEl.appendChild(d);
+  });
+  const dots = [...document.querySelectorAll('.dot')];
+  const go = i => slides[Math.max(0, Math.min(i, slides.length - 1))].scrollIntoView({ behavior: 'smooth' });
+  function update(){
+    dots.forEach((d, j) => d.classList.toggle('on', j === current));
+    if (prevBtn) prevBtn.disabled = current === 0;
+    if (nextBtn) nextBtn.disabled = current === slides.length - 1;
+  }
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting){ current = slides.indexOf(e.target); update(); } });
+  }, { threshold: 0.5 });
+  slides.forEach(s => observer.observe(s));
+  if (prevBtn) prevBtn.onclick = () => go(current - 1);
+  if (nextBtn) nextBtn.onclick = () => go(current + 1);
+  update();
+  // keyboard ↑ / ↓ do the same as the arrow buttons (one slide per hit)
+  document.addEventListener('keydown', e => {
+    if (e.target.closest('input,textarea,select,[contenteditable]')) return;
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(current + 1); }
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+  });
+</script>
+
+</body>
+</html>
