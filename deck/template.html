@@ -420,8 +420,6 @@
           <tr><td class="v">Project variables</td><td class="v v-dbx">Job parameters, read with <code>dbutils.widgets.get</code></td></tr>
           <tr><td class="v"><code>platform_a.api_client()</code></td><td class="v v-dbx">SDK client <code>WorkspaceClient()</code></td></tr>
           <tr><td class="v">Environment packages</td><td class="v v-dbx">Serverless environment dependencies</td></tr>
-          <tr><td class="v"><code>platform_a.list_datasets()</code></td><td class="v v-dbx"><code>spark.catalog.listTables("catalog.schema")</code></td></tr>
-          <tr><td class="v"><code>platform_a.run_scenario("daily")</code></td><td class="v v-dbx">Job run through the SDK: <code>jobs.run_now(job_id)</code></td></tr>
         </tbody>
       </table>
     </div>
@@ -440,8 +438,6 @@ platform_a.dataset("orders_daily").write(df)</pre>
     .mode("overwrite")
     .saveAsTable("catalog.schema.orders_daily"))</pre>
       <div class="pdec"><b>Pitfall</b>Platform A overwrites by default unless append is set. Set <code>mode</code> explicitly in Platform B.</div>
-      <div class="pdec"><b>Check</b>After the first run, compare row counts and aggregates with the source, both ways.</div>
-      <div class="callout"><b>Mapping rule</b> Keep the table and column names during the transition, so each call maps one to one.</div>
     </div>
   </div>
   <div class="note">Sources: add the API reference of each platform.</div>
@@ -468,8 +464,12 @@ platform_a.dataset("orders_daily").write(df)</pre>
   <div class="note">Sources: add the link behind the phase model.</div>
 </section>
 
-<!-- ═══════════ 6 · TWO-PANEL SLIDE ═══════════ -->
-<section class="slide" id="s-options" data-ch="Process" data-nm="Two options">
+<!-- ═══════════ 6 + 7 · HALF-PAGE PAIR: two short slides on one screen ═══════════ -->
+<!-- Slides 6 (top half) and 7 (bottom half) share one screen. This is the documented way to put
+     two short slides on one screen (SKILL.md §5 and §10). Each half is 50 vh and must fit its own
+     half. Do not pad a short slide with filler to reach the density target. -->
+<!-- ═══════════ 6 · TWO-PANEL SLIDE (top half of the pair) ═══════════ -->
+<section class="slide p2top" id="s-options" data-ch="Process" data-nm="Two options">
   <div class="ch-label">Process · Options · 6 / 7</div>
   <h1>Option A and Option B: two ways to move a project</h1>
   <div class="cols2">
@@ -501,21 +501,12 @@ platform_a.dataset("orders_daily").write(df)</pre>
       </ul>
     </div>
   </div>
-  <table class="cmp">
-    <thead><tr><th>What changes</th><th>Option A</th><th class="c-dbx">Option B</th></tr></thead>
-    <tbody>
-      <tr><td class="dim">Compute during the transition</td><td class="v">Two platforms run at the same time</td><td class="v v-dbx">Only the target platform runs</td></tr>
-      <tr><td class="dim">Effort per project</td><td class="v">Low: the schedule stays as it is</td><td class="v v-dbx">Higher: each step is rebuilt</td></tr>
-      <tr><td class="dim">Risk to the schedule</td><td class="v">Low, with a reconciliation every day</td><td class="v v-dbx">Managed by the parallel run and a tested rollback</td></tr>
-      <tr><td class="dim">Best for</td><td class="v">Projects that need a fast start</td><td class="v v-dbx">Projects that will run for years</td></tr>
-    </tbody>
-  </table>
   <div class="pdec"><b>Where Platform B helps</b>Platform B can help measure cost, run time and gaps for each option during the pilot.</div>
   <div class="note">Sources: add the link behind each option.</div>
 </section>
 
-<!-- ═══════════ 7 · NEXT STEPS (checklist + next-step box) ═══════════ -->
-<section class="slide" id="s-next" data-ch="Next steps" data-nm="Next steps">
+<!-- ═══════════ 7 · NEXT STEPS (checklist + next-step box; bottom half of the pair) ═══════════ -->
+<section class="slide p2bot" id="s-next" data-ch="Next steps" data-nm="Next steps">
   <div class="ch-label">Next steps · 7 / 7</div>
   <h1>Next step: pilot one project end to end</h1>
   <div class="mxquad">
@@ -540,15 +531,6 @@ platform_a.dataset("orders_daily").write(df)</pre>
       </ul>
     </div>
   </div>
-  <table class="cmp">
-    <thead><tr><th>Pilot scope to agree</th><th class="c-dbx">Proposed value</th></tr></thead>
-    <tbody>
-      <tr><td class="dim">Project</td><td class="v v-dbx">One project, chosen with the customer owner</td></tr>
-      <tr><td class="dim">Success measures</td><td class="v v-dbx">Cost, run time, and a row-level match with the source</td></tr>
-      <tr><td class="dim">Parallel run</td><td class="v v-dbx">The agreed business cycles, with both paths running</td></tr>
-      <tr><td class="dim">Rollback</td><td class="v v-dbx">Rehearsed before the cutover date</td></tr>
-    </tbody>
-  </table>
   <div class="callout"><b>Next step</b> Agree the pilot project and its success measures with the customer owner, then run the inventory.</div>
   <div class="note">Sources: add the link behind each checklist item.</div>
 </section>
@@ -561,6 +543,11 @@ platform_a.dataset("orders_daily").write(df)</pre>
   const scrollTarget = s => (s.classList.contains('p2bot') && s.previousElementSibling && s.previousElementSibling.classList.contains('p2top')) ? s.previousElementSibling : s;
   const goTo = i => scrollTarget(slides[i]).scrollIntoView({ behavior: 'smooth' });
   const go = i => goTo(Math.max(0, Math.min(i, slides.length - 1)));
+  // screens: a half-page pair (p2top + p2bot) is ONE screen; arrows and keys step by screen, never onto the same screen
+  const isPairTop = i => !!(slides[i] && slides[i].classList.contains('p2top') && slides[i + 1] && slides[i + 1].classList.contains('p2bot'));
+  const screenOf = i => (i > 0 && slides[i].classList.contains('p2bot') && slides[i - 1].classList.contains('p2top')) ? i - 1 : i;
+  const nextScreen = i => { const s = screenOf(i); return isPairTop(s) ? s + 2 : s + 1; };
+  const prevScreen = i => { const s = screenOf(i); return s === 0 ? 0 : screenOf(s - 1); };
   function flashBlock(c){ setTimeout(() => { c.classList.remove('capflash'); void c.offsetWidth; c.classList.add('capflash'); c.addEventListener('animationend', () => c.classList.remove('capflash'), { once: true }); }, 450); }
 
   // side menu: chapters + numbered slides from data-ch / data-nm; sub-entries = blocks (.mxcat) of a slide
@@ -590,24 +577,25 @@ platform_a.dataset("orders_daily").write(df)</pre>
 
   let current = 0;
   function update(){
-    items.forEach((b, j) => b.classList.toggle('on', j === current));
-    chapters.forEach((h, j) => h.classList.toggle('active', j === slideCh[current]));
-    if (items[current]) items[current].scrollIntoView({ block: 'nearest' });
-    if (prevBtn) prevBtn.disabled = current === 0;
-    if (nextBtn) nextBtn.disabled = current === slides.length - 1;
+    const s = screenOf(current);
+    items.forEach((b, j) => b.classList.toggle('on', j === s || (isPairTop(s) && j === s + 1)));
+    chapters.forEach((h, j) => h.classList.toggle('active', j === slideCh[s]));
+    if (items[s]) items[s].scrollIntoView({ block: 'nearest' });
+    if (prevBtn) prevBtn.disabled = s === 0;
+    if (nextBtn) nextBtn.disabled = nextScreen(s) >= slides.length;
   }
   const observer = new IntersectionObserver(entries => {
     entries.forEach(e => { if (e.isIntersecting) { current = slides.indexOf(e.target); update(); } });
   }, { threshold: 0.35 });
   slides.forEach(s => observer.observe(s));
-  if (prevBtn) prevBtn.onclick = () => go(current - 1);
-  if (nextBtn) nextBtn.onclick = () => go(current + 1);
+  if (prevBtn) prevBtn.onclick = () => go(prevScreen(current));
+  if (nextBtn) nextBtn.onclick = () => go(nextScreen(current));
   update();
-  // keyboard: ↓ / PageDown / Space = next, ↑ / PageUp = previous, one slide per key; ignored while typing
+  // keyboard: ↓ / PageDown / Space = next screen, ↑ / PageUp = previous screen; ignored while typing
   document.addEventListener('keydown', e => {
     if (e.target.closest && e.target.closest('input,textarea,select,[contenteditable]')) return;
-    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(current + 1); }
-    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(current - 1); }
+    if (e.key === 'ArrowDown' || e.key === 'PageDown' || e.key === ' ') { e.preventDefault(); go(nextScreen(current)); }
+    else if (e.key === 'ArrowUp' || e.key === 'PageUp') { e.preventDefault(); go(prevScreen(current)); }
   });
 </script>
 
