@@ -4,7 +4,7 @@ Three single-file HTML templates in the Databricks house style (official palette
 
 | Folder | Template | Use it for |
 |---|---|---|
-| [`deck/`](deck/template.html) | Slide deck | Full-screen, scroll-snap slides with ↑ / ↓ navigation. Layouts: hero split, horizontal flow, card grid, numbered rows, stat tiles. |
+| [`deck/`](deck/template.html) | Slide deck | Full-screen, scroll-snap slides with a side menu and ↑ / ↓ navigation. Layouts: overview with diagram, dense comparison grid, object table, API mapping, phases table, two-panel options, next steps. |
 | [`graph/`](graph/template.html) | Architecture diagram | SVG boxes with icons, labelled arrows, background bands and a highlighted key box. |
 | [`report/`](report/template.html) | Meeting report | One page, one table per topic, with `{{PLACEHOLDERS}}` to fill. |
 
