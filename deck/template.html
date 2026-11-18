@@ -134,6 +134,8 @@
   .cmp tbody tr:last-child td{border-bottom:none;}
   .cmp tbody tr:nth-child(even){background:var(--navy-dim);}
   .snip-lbl{display:block;font-family:'DM Mono',monospace;font-weight:700;font-size:0.72rem;letter-spacing:1.2px;text-transform:uppercase;color:var(--text3);margin:0.3rem 0 0.25rem;}
+  .api3{display:grid;grid-template-columns:1fr 1fr 0.8fr;gap:clamp(0.8rem,1.6vw,1.6rem);align-items:start;}
+  .api3 .pdec{margin-top:1.55rem;}
   pre.snip{font-family:'DM Mono',monospace;font-size:clamp(0.7rem,0.84vw,0.98rem);line-height:1.42;color:var(--text);background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--dbxblue);border-radius:var(--r);padding:0.6rem 0.9rem;white-space:pre;overflow:hidden;margin-bottom:0.5rem;}
   .slide.dense .cmp{margin-top:0.3rem;}
   .slide.dense .cmp th,.slide.dense .cmp td{padding:clamp(0.2rem,0.45vh,0.4rem) clamp(0.5rem,0.7vw,0.8rem);}
@@ -417,12 +419,11 @@
 </section>
 
 <!-- ═══════════ 4 · API / CODE MAPPING ═══════════ -->
-<section class="slide dense" id="s-api" data-ch="Technical" data-nm="API mapping">
+<section class="slide" id="s-api" data-ch="Technical" data-nm="API mapping">
   <div class="ch-label">Technical · API · 4 / 7</div>
   <h1>API mapping: each Platform A call and its Platform B replacement</h1>
-  <div class="cols2 split-wide">
-    <div>
-      <table class="cmp">
+  <!-- table full width, then the before / after code and the pitfall side by side: one screen, no empty column -->
+  <table class="cmp">
         <thead><tr><th>Platform A call</th><th class="c-dbx">Platform B replacement</th></tr></thead>
         <tbody>
           <tr><td class="v"><code>platform_a.dataset("name").read()</code></td><td class="v v-dbx"><code>spark.read.table("catalog.schema.name")</code></td></tr>
@@ -433,7 +434,7 @@
           <tr><td class="v">Environment packages</td><td class="v v-dbx">Serverless environment dependencies</td></tr>
         </tbody>
       </table>
-    </div>
+  <div class="api3">
     <div>
       <span class="snip-lbl">Before · Platform A script</span>
       <pre class="snip">import platform_a
@@ -441,6 +442,8 @@
 df = platform_a.dataset("orders").read()
 # ... transformations ...
 platform_a.dataset("orders_daily").write(df)</pre>
+    </div>
+    <div>
       <span class="snip-lbl">After · Platform B notebook</span>
       <pre class="snip">df = spark.read.table("catalog.schema.orders")
 # ... transformations ...
@@ -448,6 +451,8 @@ platform_a.dataset("orders_daily").write(df)</pre>
     .format("delta")
     .mode("overwrite")
     .saveAsTable("catalog.schema.orders_daily"))</pre>
+    </div>
+    <div>
       <div class="pdec"><b>Pitfall</b>Platform A overwrites by default unless append is set. Set <code>mode</code> explicitly in Platform B.</div>
     </div>
   </div>
