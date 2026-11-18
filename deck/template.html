@@ -72,7 +72,7 @@
   .snav[disabled]{opacity:0.28;pointer-events:none;box-shadow:none;}
 
   /* ═══ SLIDE BASE — content-sized, top-aligned, one background tint ═══ */
-  .slide{min-height:var(--svh,100vh);scroll-snap-align:start;padding:calc(var(--nav-h) + clamp(1.2rem,2.6vh,2.4rem)) clamp(1.6rem,4vw,5rem) clamp(1.6rem,3.5vh,3rem);border-bottom:1px solid var(--border);display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(0.5rem,1.2vh,1rem);background:radial-gradient(ellipse at 88% 12%,var(--navy-dim) 0%,var(--bg) 58%);}
+  .slide{min-height:100vh;scroll-snap-align:start;padding:calc(var(--nav-h) + clamp(1.2rem,2.6vh,2.4rem)) clamp(1.6rem,4vw,5rem) clamp(1.6rem,3.5vh,3rem);border-bottom:1px solid var(--border);display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(0.5rem,1.2vh,1rem);background:radial-gradient(ellipse at 88% 12%,var(--navy-dim) 0%,var(--bg) 58%);}
   .slide.dense{gap:clamp(0.4rem,1vh,0.8rem);}
   .k{font-weight:700;color:var(--red);}
   .red{color:var(--red);}
@@ -173,7 +173,7 @@
   .mxtk li::before{content:'';position:absolute;left:0;top:0.5em;width:4px;height:4px;border-radius:50%;background:var(--red);}
 
   /* dense grid slide: the grid is the slide; blocks grow to their content, nothing cut */
-  .slide.mxdense{height:auto;min-height:var(--svh,100vh);}
+  .slide.mxdense{height:auto;min-height:100vh;}
   .mxdense .mxquad{gap:0;margin-top:0.1rem;align-items:stretch;}
   .mxdense .mxcat{display:grid;grid-template-columns:clamp(150px,30%,260px) minmax(0,1fr);grid-template-areas:"top top" "tk cmp";column-gap:0.6rem;align-items:start;align-content:start;padding:clamp(0.5rem,1.2vh,0.9rem) 1.1rem;}
   .mxdense .mxcat:nth-child(odd){padding-left:0;}
@@ -192,8 +192,8 @@
      Each half is half a screen and clips (overflow:hidden): a half must fit its half, or it is not a pair. */
   @media screen{
     .slide.p2top, .slide.p2bot{min-height:0;overflow:hidden;gap:0.3rem;justify-content:flex-start;}
-    .slide.p2top{height:calc(var(--svh,100vh) / 2);}
-    .slide.p2bot{height:calc(var(--svh,100vh) / 2);padding-top:clamp(0.8rem,2vh,1.4rem);border-top:1px solid var(--border2);scroll-snap-align:none;}
+    .slide.p2top{height:50vh;}
+    .slide.p2bot{height:50vh;padding-top:clamp(0.8rem,2vh,1.4rem);border-top:1px solid var(--border2);scroll-snap-align:none;}
     .p2top h1, .p2bot h1{font-size:clamp(1.3rem,2.1vw,2rem);letter-spacing:-0.6px;line-height:1.08;}
     .p2top .lead, .p2bot .lead{font-size:clamp(0.88rem,1.05vw,1.15rem);line-height:1.3;margin-top:0.3rem;max-width:none;}
     .p2top .ch-label, .p2bot .ch-label{font-size:clamp(0.62rem,0.8vw,0.82rem);}
@@ -262,17 +262,6 @@
 
   @media print{ section.slide:last-of-type{break-after:auto !important;page-break-after:auto !important;} } /* no blank page after the last slide */
 </style>
-<style>@media print{html{zoom:1 !important;--svh:100vh !important;}}</style>
-<script>
-  /* Screen fit (mandatory, keep it): the deck is designed for 1600x900. On any other screen the whole page
-     is zoomed by k so each slide fills the screen exactly as it does at 1600x900. Without it, a 2560x1440
-     screen shows every slide in its top-left 60 % and the rest empty. --svh = one screen height in design px. */
-  (function(){ const r = document.documentElement;
-    function fit(){ if (innerWidth <= 900) { r.style.zoom = ''; r.style.removeProperty('--svh'); return; }
-      const k = Math.min(innerWidth / 1600, innerHeight / 900);
-      r.style.zoom = k; r.style.setProperty('--svh', (innerHeight / k) + 'px'); }
-    fit(); addEventListener('resize', fit); })();
-</script>
 </head>
 <body>
 
