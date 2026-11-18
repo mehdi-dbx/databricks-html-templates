@@ -541,17 +541,50 @@ df = df.filter(F.col("status") == "paid")
 <div class="blk" id="s-scope">
   <div class="ch-label">Process · Scope · 6 / 7</div>
   <h1>Scope of the first wave: three projects, one pilot</h1>
-  <div class="panel p-dbx"><div class="ph"><svg class="ico-sm cdbx"><use href="#ico-target"/></svg><h3>In the first wave</h3></div>
-    <ul class="blist dbx tight">
-      <li>Three projects from the <b>finance</b> domain, chosen from the inventory.
-        <ul class="sub">
-          <li>Each project has one owner and one set of consumers.</li>
-        </ul>
-      </li>
-      <li>The pilot project is the one with the <b>fewest downstream consumers</b>.</li>
-    </ul>
+  <div class="cols2">
+    <div class="panel p-dbx"><div class="ph"><svg class="ico-sm cdbx"><use href="#ico-target"/></svg><h3>In the first wave</h3></div>
+      <ul class="blist dbx tight">
+        <li>Three projects from the <b>finance</b> domain, chosen from the inventory.
+          <ul class="sub">
+            <li>Each project has one owner and one set of consumers.</li>
+            <li>Each one scores low on plugins and custom code.</li>
+          </ul>
+        </li>
+        <li>The pilot project is the one with the <b>fewest downstream consumers</b>.
+          <ul class="sub">
+            <li>Its outputs are already checked by the finance team every month.</li>
+          </ul>
+        </li>
+        <li>Batch pipelines on a <b>daily or weekly</b> schedule.
+          <ul class="sub">
+            <li>The schedule is recreated as a Platform B job.</li>
+          </ul>
+        </li>
+        <li>File and database sources already reachable from <b>Platform B</b>.</li>
+      </ul>
+    </div>
+    <div class="panel p-dku"><div class="ph"><svg class="ico-sm cm"><use href="#ico-clock"/></svg><h3>Out of scope this wave</h3></div>
+      <ul class="blist tight">
+        <li>Real-time and streaming pipelines.
+          <ul class="sub">
+            <li>They move with the streaming redesign in wave 2.</li>
+          </ul>
+        </li>
+        <li>Machine learning models and their training pipelines.
+          <ul class="sub">
+            <li>They need the model registry decision first.</li>
+          </ul>
+        </li>
+        <li>Projects with heavy plugin or custom-code steps.
+          <ul class="sub">
+            <li>Each one is a redesign, scored in the inventory.</li>
+          </ul>
+        </li>
+        <li>Anything without a named <b>business owner</b>.</li>
+      </ul>
+    </div>
   </div>
-  <div class="pdec"><b>Out of scope</b>Real-time pipelines and the machine learning models move in a later wave.</div>
+  <div class="pdec"><b>Scope rule</b>A project enters the wave only when its owner, its consumers and its success measure are named; everything else waits for the next inventory pass.</div>
   <div class="note">Sources: add the inventory export that the scope is based on.</div>
 </div>
 </section>
@@ -565,20 +598,51 @@ df = df.filter(F.col("status") == "paid")
     <div class="mxcat">
       <div class="mxcat-top"><h3>Prepare and rebuild</h3></div>
       <ul class="blist chk tight">
-        <li>Inventory the project through the API, export its definition as a backup, and score it.</li>
+        <li>Inventory the project through the API, export its definition as a backup, and score it.
+          <ul class="sub">
+            <li>The score sets the order of the rebuild inside the pilot.</li>
+          </ul>
+        </li>
         <li>Set up access, storage and a connection for the source data.</li>
         <li>Convert the file datasets in place, and set up a federated catalog for the database sources.</li>
+        <li>Rebuild each visual step as SQL, and each script as a notebook or a job.
+          <ul class="sub">
+            <li>Each step gets one target and one command (page 3).</li>
+          </ul>
+        </li>
+        <li>Recreate the schedule and its alerts as a Platform B job.</li>
+        <li>Put the rebuilt project under source control, with one deployment bundle per environment.
+          <ul class="sub">
+            <li>The bundle is the template the next waves copy.</li>
+          </ul>
+        </li>
       </ul>
     </div>
     <div class="mxcat">
       <div class="mxcat-top"><h3>Deliver, compare and cut over</h3></div>
       <ul class="blist chk tight">
         <li>Compare each output with the source, both ways, plus keys and aggregates.</li>
-        <li>Run both paths in parallel for the agreed cycles, rehearse the rollback, then cut over.</li>
+        <li>Run both paths in parallel for the agreed cycles, with the same inputs.
+          <ul class="sub">
+            <li>The comparison report is the go / no-go for the cutover.</li>
+          </ul>
+        </li>
+        <li>Rehearse the rollback: switch the consumers back and check the reports.</li>
+        <li>Cut over the consumers, then switch off the source schedule.
+          <ul class="sub">
+            <li>The source project stays readable until the wave closes.</li>
+          </ul>
+        </li>
+        <li>Write the migration pattern down so the next wave reuses it.</li>
+        <li>Hand the runbook to the project owner and walk the team through the new job.
+          <ul class="sub">
+            <li>The owner runs the first business cycle alone, with support on call.</li>
+          </ul>
+        </li>
       </ul>
     </div>
   </div>
-  <div class="callout"><b>Next step</b> Agree the pilot project and its success measures with the customer owner, then run the inventory.</div>
+  <div class="callout"><b>Next step</b> Agree the pilot project and its success measures with the customer owner, then run the inventory. The pilot starts the week after.</div>
   <div class="note">Sources: add the link behind each checklist item.</div>
 </div>
 </section>
