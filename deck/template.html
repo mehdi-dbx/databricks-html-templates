@@ -259,6 +259,8 @@
     .slide.p2top{height:calc(var(--nav-h) + 3in);}
     .slide.p2bot{height:3.3in;}
   }
+
+  @media print{ section.slide:last-of-type{break-after:auto !important;page-break-after:auto !important;} } /* no blank page after the last slide */
 </style>
 <style>@media print{html{zoom:1 !important;--svh:100vh !important;}}</style>
 <script>
