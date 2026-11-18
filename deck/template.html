@@ -581,7 +581,7 @@ platform_a.dataset("orders_daily").write(df)</pre>
     b.onclick = () => goTo(i);
     side.appendChild(b); items.push(b);
     let after = b;
-    s.querySelectorAll('.mxcat').forEach((c, ci) => {
+    (s.classList.contains('mxdense') ? s.querySelectorAll('.mxcat') : []).forEach((c, ci) => {
       const sb = document.createElement('button'); sb.className = 'dside-it sub';
       const h = c.querySelector('h3') || c.querySelector('.ch-label');
       sb.textContent = h ? h.textContent : 'Block ' + (ci + 1);
