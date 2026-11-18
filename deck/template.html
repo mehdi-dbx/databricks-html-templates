@@ -184,7 +184,7 @@
   .mxdense .mxcat:nth-child(even){border-left:2px solid var(--border2);padding-right:0;}
   .mxdense .mxcat:nth-child(n+3){border-top:2px solid var(--border2);}
   .mxdense .mxcat-top{grid-area:top;min-height:2.4rem;align-items:flex-end;margin-bottom:0.2rem;}
-  .mxdense .mxcat-top h3{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:0.15rem;}
+  .mxdense .mxcat-top h3{margin-bottom:0.15rem;}
   .mxdense .mxtk{grid-area:tk;margin-top:0;align-self:stretch;display:flex;flex-direction:column;justify-content:flex-start;}
   .mxdense .mxcmp{grid-area:cmp;align-self:stretch;}
   .mxdense .mxcmp>div{padding-top:clamp(0.1rem,0.45vh,0.35rem);padding-bottom:clamp(0.1rem,0.45vh,0.35rem);font-size:clamp(0.68rem,0.8vw,0.95rem);}
@@ -194,7 +194,8 @@
   /* ═══ HALF-PAGE PAIRS: two short sections on one screen, stacked ═══
      <section class="slide p2top"> … </section><section class="slide p2bot"> … </section>
      Each half is half a screen and clips (overflow:hidden): a half must fit its half, or it is not a pair. */
-  @media screen{
+  /* half-page sizes apply on screen and in print */
+  @media all{
     .slide.p2top, .slide.p2bot{min-height:0;overflow:hidden;gap:0.3rem;justify-content:flex-start;}
     .slide.p2top{height:50vh;}
     .slide.p2bot{height:50vh;padding-top:clamp(0.8rem,2vh,1.4rem);border-top:1px solid var(--border2);scroll-snap-align:none;}
@@ -246,25 +247,21 @@
   .graph .band{fill:var(--surface2);stroke:var(--border);stroke-width:1;}
   .graph .band-lbl{font-family:'DM Sans',sans-serif !important;font-weight:700;font-size:10.5px !important;letter-spacing:2px !important;fill:#8a9aa1 !important;}
 
-  /* ═══ PRINT / PDF: one 16:9 page per slide ═══ */
+  /* ═══ PRINT / PDF: one page = one screen. Page 2560x1440 px (16:9). The slide keeps the screen layout
+     (side-menu space included, menu and nav hidden). Half pages are 720 px each: a pair = one page.
+     No zoom, no scale: the sizes are the screen sizes. ═══ */
   @media print{
-    @page{size:13.333in 7.75in;margin:0;}
+    @page{size:2560px 1440px;margin:0;}
+    :root{--side:15rem;}
     html,body{background:var(--bg);-webkit-print-color-adjust:exact;print-color-adjust:exact;}
     html{scroll-snap-type:none;scroll-behavior:auto;}
-    #slideNav, aside.dside{display:none !important;}
-    .slide{min-height:0;height:7.75in;width:13.333in;overflow:hidden;border-bottom:none;padding-left:clamp(1.2rem,4vw,4rem);padding-top:calc(var(--nav-h) + 0.4rem);break-after:page;page-break-after:always;break-inside:avoid;page-break-inside:avoid;}
-    .slide:last-of-type{break-after:auto;page-break-after:auto;}
-    .cols2, .mxquad{grid-template-columns:1fr 1fr;}
-    .mxdense .mxcat{grid-template-columns:clamp(150px,30%,260px) minmax(0,1fr);}
-    .mxcmp>div{padding:0.1rem 0.6rem;font-size:0.72rem;}
-    .mxtk li{font-size:0.72rem;line-height:1.18;}
-    .mxdense .mxcat-top{min-height:0;}
-    .slide.dense .cmp td.v, .slide.dense .cmp td.dim{font-size:0.72rem;line-height:1.2;}
-    .slide.p2top{height:calc(var(--nav-h) + 3in);}
-    .slide.p2bot{height:3.3in;}
+    nav, #slideNav, aside.dside{display:none !important;}
+    .slide{min-height:0;height:1440px;padding-left:calc(var(--side) + clamp(1.6rem,4vw,5rem));overflow:hidden;border-bottom:none;break-after:page;page-break-after:always;break-inside:avoid;page-break-inside:avoid;}
+    .slide.mxdense{padding-right:clamp(4.5rem,5vw,6rem);}
+    .slide.p2top{height:720px;break-after:avoid;page-break-after:avoid;}
+    .slide.p2bot{height:720px;border-top:none;}
+    section.slide:last-of-type{break-after:auto !important;page-break-after:auto !important;}
   }
-
-  @media print{ section.slide:last-of-type{break-after:auto !important;page-break-after:auto !important;} } /* no blank page after the last slide */
 </style>
 </head>
 <body>
@@ -285,12 +282,12 @@
   <button class="snav" id="navNext" title="Next slide" aria-label="Next slide"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></button>
 </div>
 
-<!-- ═══════════ 1 · OVERVIEW WITH DIAGRAM ═══════════ -->
-<section class="slide mxdense" data-ch="Overview" data-nm="Overview and capability grid">
+<!-- ═══════════ PAGE 1 · OVERVIEW WITH DIAGRAM (one screen) ═══════════ -->
+<section class="slide" data-ch="Overview" data-nm="Overview with diagram">
 <div class="blk" id="s-overview">
-  <div class="ch-label">Overview · 1 / 7</div>
+  <div class="ch-label">Overview · Architecture · 1 / 7</div>
   <h1>Platform A: a layer over external compute · Platform B: one platform</h1>
-  <p class="lead">One or two sentences of framing. The diagram shows which layer of Platform A lands on which layer of Platform B; the next slides show how each one is built.</p>
+  <p class="lead">Framing in one or two sentences. The diagram shows which layer of Platform A lands on which layer of Platform B; the next pages show how each layer is built.</p>
   <svg class="graph archgraph" viewBox="0 0 1600 440" xmlns="http://www.w3.org/2000/svg">
 <defs><marker id="ah-ov" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#8a9aa1"/></marker></defs>
 <rect class="band" x="30" y="20" width="750" height="410" rx="18"/><text class="band-lbl" x="56" y="50">PLATFORM A STACK</text>
@@ -311,29 +308,39 @@
   <div class="cols2">
     <div class="panel p-dku"><div class="ph"><svg class="ico-sm cm"><use href="#ico-book"/></svg><h3>Platform A</h3></div>
       <ul class="blist tight">
-        <li>Each source object gets <b>one target</b> and its command (slide 3).</li>
-        <li>Example point: the scheduling layer moves <b>last</b>, after the data it reads.</li>
+        <li>Each source object gets <b>one target</b> and its command (page 3).
+          <ul class="sub">
+            <li>Objects are listed through the API before the move starts.</li>
+          </ul>
+        </li>
+        <li>The scheduling layer moves <b>last</b>, after the data it reads.</li>
       </ul>
     </div>
     <div class="panel p-dbx"><div class="ph"><svg class="ico-sm cdbx"><use href="#ico-target"/></svg><h3>Platform B</h3></div>
       <ul class="blist dbx tight">
-        <li><b>One platform</b> for storage, compute, governance and serving.</li>
-        <li>Example point: the migration runs as a <b>project plan</b>, one wave at a time (slide 5).</li>
+        <li><b>One platform</b> for storage, compute, governance and serving.
+          <ul class="sub">
+            <li>One bill and one support contract for all four layers.</li>
+          </ul>
+        </li>
+        <li>The migration runs as a <b>project plan</b>, one wave at a time (page 5).</li>
       </ul>
     </div>
   </div>
-  <div class="pdec"><b>What works</b>Example: the source layer can keep running on Platform B compute while the rebuild proceeds (slide 6).</div>
+  <div class="pdec"><b>What works</b>The source layer can keep running on Platform B compute while the rebuild proceeds (page 6).</div>
   <div class="note">Sources: add the link to the page behind each claim.</div>
 </div>
+</section>
 
-<!-- ═══════════ 2 · DENSE COMPARISON GRID (.mxdense) ═══════════ -->
+<!-- ═══════════ PAGE 2 · DENSE COMPARISON GRID (layout 2, one screen, four blocks) ═══════════ -->
+<section class="slide mxdense" data-ch="Comparison" data-nm="Capabilities by category">
 <div class="blk" id="s-grid">
   <div class="ch-label">Comparison · Capabilities · 2 / 7</div>
-  <h2 class="blk-title">Platform A and Platform B by category: model, data, tracing and access</h1>
+  <h2 class="blk-title">Platform A and Platform B by category: model, data, operations and access</h2>
   <div class="mxquad">
     <div class="mxcat">
       <div class="mxcat-top"><div class="ch-label">Model</div><h3>Platform model</h3></div>
-      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Platform A needs a <b>separate system</b> underneath.</li><li>Platform B is <b>one product</b>, one bill, one support contract.</li><li>Compute <b>included</b> from the first query.</li></ul></div>
+      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Platform A needs a <b>separate system</b> underneath.</li><li>Platform B is <b>one product</b>, one bill, one support contract.</li><li>Compute is <b>included</b> from the first query.</li></ul></div>
       <div class="mxcmp">
         <div class="cap r0">Capability</div><div class="oth r0">Platform A</div><div class="dbx r0">Platform B</div>
         <div class="grp">Foundation</div>
@@ -342,45 +349,56 @@
         <div class="grp">Operations</div>
         <div class="cap">No separate system to run</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
         <div class="cap">Single support contract</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Upgrades applied by the platform</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Regions and clouds under one contract</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
       </div>
     </div>
     <div class="mxcat">
-      <div class="mxcat-top"><div class="ch-label">Data</div><h3>Data location</h3></div>
-      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Data stays <b>in your account</b>.</li><li>Open table format, <b>no copy</b> to move out.</li><li>Region chosen <b>per workspace</b>.</li></ul></div>
+      <div class="mxcat-top"><div class="ch-label">Data</div><h3>Data layer</h3></div>
+      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Tables use an <b>open format</b> on both sides of the move.</li><li>Platform B keeps <b>table history</b> for rollback.</li><li>Files are converted <b>in place</b>, not copied.</li></ul></div>
       <div class="mxcmp">
         <div class="cap r0">Capability</div><div class="oth r0">Platform A</div><div class="dbx r0">Platform B</div>
-        <div class="grp">Location</div>
-        <div class="cap">Data stays in the customer account</div><div class="oth"><span class="pp">~</span> self-host</div><div class="dbx"><span class="y">✓</span></div>
-        <div class="cap">Region chosen per workspace</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
-        <div class="grp">Format</div>
-        <div class="cap">Open table format</div><div class="oth"><span class="pp">~</span> export job</div><div class="dbx"><span class="y">✓</span></div>
-        <div class="cap">Query in place, no copy</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="grp">Storage</div>
+        <div class="cap">Open table format</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Table history and rollback</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="grp">Quality</div>
+        <div class="cap">Declared data checks on tables</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Column-level lineage</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Schema changes tracked per table</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Checks run on each write</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
       </div>
     </div>
     <div class="mxcat">
-      <div class="mxcat-top"><div class="ch-label">Tracing</div><h3>Tracing and SDKs</h3></div>
-      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Same <b>open standard</b>, so moving is a small change.</li><li>Traces land as <b>tables</b>, ready to query and join.</li><li>Traces queried in <b>SQL</b> next to business data.</li></ul></div>
+      <div class="mxcat-top"><div class="ch-label">Tracing</div><h3>Runs and tracing</h3></div>
+      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Every run keeps a <b>trace</b> with inputs and outputs.</li><li>Alerts route to the <b>same channel</b> as the job.</li><li>Platform A needs an <b>extra tool</b> for the same view.</li></ul></div>
       <div class="mxcmp">
         <div class="cap r0">Capability</div><div class="oth r0">Platform A</div><div class="dbx r0">Platform B</div>
-        <div class="grp">Standard</div>
-        <div class="cap">OpenTelemetry-based tracing</div><div class="oth"><span class="y">✓</span></div><div class="dbx"><span class="y">✓</span></div>
-        <div class="cap">Broad framework instrumentation</div><div class="oth"><span class="y">✓</span></div><div class="dbx"><span class="y">✓</span></div>
-        <div class="grp">Destination</div>
-        <div class="cap">Traces queryable in SQL</div><div class="oth"><span class="pp">~</span> not real-time</div><div class="dbx"><span class="y">✓</span></div>
-        <div class="cap">Traces land in the governed store</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="grp">Runs</div>
+        <div class="cap">Run history per job, with inputs</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Failure alerts on the same channel</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Retries and timeouts visible per run</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Logs kept for the audit window</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="grp">Observability</div>
+        <div class="cap">Trace of each model call</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Cost per job in the platform</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Trace of each agent step</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Latency per step in the run view</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
       </div>
     </div>
     <div class="mxcat">
-      <div class="mxcat-top"><div class="ch-label">Access</div><h3>Access control</h3></div>
-      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Same <b>role-based access</b> across data and models.</li><li>Row and column controls <b>apply to every consumer</b>.</li><li>Service identities <b>per agent</b>.</li></ul></div>
+      <div class="mxcat-top"><div class="ch-label">Access</div><h3>Access and sharing</h3></div>
+      <div class="mxtk"><span class="tk-label">Takeaway</span><ul><li>Access is set <b>per group</b> in one catalog.</li><li>Platform A sets access <b>per project</b>, in each tool.</li><li>Sharing across teams needs <b>no copy</b> on Platform B.</li></ul></div>
       <div class="mxcmp">
         <div class="cap r0">Capability</div><div class="oth r0">Platform A</div><div class="dbx r0">Platform B</div>
-        <div class="grp">Scope</div>
-        <div class="cap">Row and column controls</div><div class="oth"><span class="pp">~</span> views</div><div class="dbx"><span class="y">✓</span></div>
-        <div class="cap">Audit log for each query</div><div class="oth"><span class="y">✓</span></div><div class="dbx"><span class="y">✓</span></div>
-        <div class="grp">Identity</div>
-        <div class="cap">Groups from the identity provider</div><div class="oth"><span class="y">✓</span></div><div class="dbx"><span class="y">✓</span></div>
-        <div class="cap">Service identity per agent</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="grp">Control</div>
+        <div class="cap">One catalog for all tables</div><div class="oth"><span class="n">✕</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Service identities per job</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Row and column filters</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="grp">Sharing</div>
+        <div class="cap">Share a table without a copy</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Audit log of reads and writes</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Token-based access for external tools</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
+        <div class="cap">Access requests handled in the platform</div><div class="oth"><span class="pp">~</span></div><div class="dbx"><span class="y">✓</span></div>
       </div>
     </div>
   </div>
@@ -388,8 +406,8 @@
 </div>
 </section>
 
-<!-- ═══════════ 3 · OBJECT-BY-OBJECT TABLE ═══════════ -->
-<section class="slide" data-ch="Technical" data-nm="Object and API mapping">
+<!-- ═══════════ PAGE 3 · OBJECT-BY-OBJECT TABLE (layout 3, one screen) ═══════════ -->
+<section class="slide" data-ch="Technical" data-nm="Object by object mapping">
 <div class="blk" id="s-objects">
   <div class="ch-label">Technical · Objects · 3 / 7</div>
   <h1>Object by object: each source object, how it migrates, and the target command</h1>
@@ -415,40 +433,47 @@
   <div class="pdec"><b>Where Platform B helps</b>Platform B can help rebuild each object with the tool shown. Confirm each command on the target version before use.</div>
   <div class="note">Sources: add the link to the documentation of each tool in the command column.</div>
 </div>
+</section>
 
-<!-- ═══════════ 4 · API / CODE MAPPING ═══════════ -->
+<!-- ═══════════ PAGE 4 · API / CODE MAPPING (data-group="merge": the call table and the code pair were two slides, now one) ═══════════ -->
+<section class="slide" data-ch="Technical" data-nm="Call by call, with code" data-group="merge">
 <div class="blk" id="s-api">
-  <div class="ch-label">Technical · API · 4 / 7</div>
-  <h2 class="blk-title">API mapping: each Platform A call and its Platform B replacement</h1>
-  <!-- table full width, then the before / after code and the pitfall side by side: one screen, no empty column -->
+  <div class="ch-label">Technical · Calls · 4 / 7</div>
+  <h1>Call by call: each Platform A call, its Platform B replacement, and the pitfall</h1>
   <table class="cmp">
-        <thead><tr><th>Platform A call</th><th class="c-dbx">Platform B replacement</th></tr></thead>
-        <tbody>
-          <tr><td class="v"><code>platform_a.dataset("name").read()</code></td><td class="v v-dbx"><code>spark.read.table("catalog.schema.name")</code></td></tr>
-          <tr><td class="v"><code>platform_a.dataset("name").write(df)</code></td><td class="v v-dbx"><code>df.write.format("delta").mode("overwrite").saveAsTable(...)</code></td></tr>
-          <tr><td class="v"><code>platform_a.folder("id")</code> read and upload</td><td class="v v-dbx">Volume paths <code>/Volumes/&lt;catalog&gt;/&lt;schema&gt;/&lt;volume&gt;/...</code></td></tr>
-          <tr><td class="v">Project variables</td><td class="v v-dbx">Job parameters, read with <code>dbutils.widgets.get</code></td></tr>
-          <tr><td class="v"><code>platform_a.api_client()</code></td><td class="v v-dbx">SDK client <code>WorkspaceClient()</code></td></tr>
-          <tr><td class="v">Environment packages</td><td class="v v-dbx">Serverless environment dependencies</td></tr>
-        </tbody>
-      </table>
+    <thead><tr><th>Platform A call</th><th class="c-dbx">Platform B replacement</th><th>What changes</th></tr></thead>
+    <tbody>
+      <tr><td class="dim"><code>dataset(name).read()</code></td><td class="v v-dbx"><code>spark.read.table(name)</code></td><td class="v">The dataset name becomes a three-level table name</td></tr>
+      <tr><td class="dim"><code>dataset(name).write(df)</code></td><td class="v v-dbx"><code>df.write.mode(…).saveAsTable(name)</code></td><td class="v">The write mode is explicit, not a default</td></tr>
+      <tr><td class="dim"><code>recipe.run()</code></td><td class="v v-dbx"><code>jobs.run_now(job_id)</code></td><td class="v">The run is a job task with its own trigger</td></tr>
+      <tr><td class="dim"><code>project.list_objects()</code></td><td class="v v-dbx"><code>client.list_tables(catalog, schema)</code></td><td class="v">Listing is per schema, not per project</td></tr>
+      <tr><td class="dim"><code>model.predict(df)</code></td><td class="v v-dbx"><code>POST /serving-endpoints/{name}/invocations</code></td><td class="v">The endpoint takes the same input schema</td></tr>
+      <tr><td class="dim"><code>dataset(name).schema()</code></td><td class="v v-dbx"><code>spark.table(name).schema</code></td><td class="v">The schema is read from the catalog, not from the file</td></tr>
+      <tr><td class="dim"><code>scenario.run(trigger)</code></td><td class="v v-dbx"><code>jobs.run_now(job_id, job_parameters)</code></td><td class="v">Parameters are passed by name, not by position</td></tr>
+      <tr><td class="dim"><code>dataset.delete()</code></td><td class="v v-dbx"><code>client.delete_table(name)</code></td><td class="v">Deletes are explicit and written to the audit log</td></tr>
+      <tr><td class="dim"><code>dataset.partition_by(col)</code></td><td class="v v-dbx"><code>.partitionBy(col)</code></td><td class="v">Partition columns are set at write time, once</td></tr>
+    </tbody>
+  </table>
   <div class="api3">
     <div>
       <span class="snip-lbl">Before · Platform A script</span>
-      <pre class="snip">import platform_a
-
+<pre class="snip">import platform_a as pa
+platform_a = pa.connect(project="sales")
 df = platform_a.dataset("orders").read()
+df = df[df.status == "paid"]
 # ... transformations ...
 platform_a.dataset("orders_daily").write(df)</pre>
     </div>
     <div>
       <span class="snip-lbl">After · Platform B notebook</span>
-      <pre class="snip">df = spark.read.table("catalog.schema.orders")
+<pre class="snip">from pyspark.sql import functions as F
+df = spark.read.table("sales.bronze.orders")
+df = df.filter(F.col("status") == "paid")
 # ... transformations ...
 (df.write
     .format("delta")
     .mode("overwrite")
-    .saveAsTable("catalog.schema.orders_daily"))</pre>
+    .saveAsTable("sales.gold.orders_daily"))</pre>
     </div>
     <div>
       <div class="pdec"><b>Pitfall</b>Platform A overwrites by default unless append is set. Set <code>mode</code> explicitly in Platform B.</div>
@@ -458,32 +483,11 @@ platform_a.dataset("orders_daily").write(df)</pre>
 </div>
 </section>
 
-<!-- ═══════════ 5 · PROCESS / PHASES TABLE ═══════════ -->
-<section class="slide" data-ch="Process" data-nm="Phases, options and next steps">
-<div class="blk" id="s-phases">
-  <div class="ch-label">Process · Phases · 5 / 7</div>
-  <h1>Phases: eight steps from inventory to decommissioning, each with a deliverable</h1>
-  <table class="cmp">
-    <thead><tr><th>Phase</th><th>What we do concretely</th><th>Deliverable</th><th>Example</th></tr></thead>
-    <tbody>
-      <tr><td class="dim">1. Inventory</td><td class="v">List each project through the API: objects by type, plugins, models, schedules</td><td class="v">A table per project with a complexity score</td><td class="v">Example: about 40 projects</td></tr>
-      <tr><td class="dim">2. Prioritise</td><td class="v">Classify each project as quick win, redesign or later wave</td><td class="v">The list of waves</td><td class="v">Example: high-volume pipelines first</td></tr>
-      <tr><td class="dim">3. Foundation</td><td class="v">Access model, source control, bundles, a first workspace</td><td class="v">A platform ready for a first project</td><td class="v">Example: one workspace per team</td></tr>
-      <tr><td class="dim">4. Pilot</td><td class="v">Migrate one project end to end; measure cost, run time and gaps</td><td class="v">The reusable migration pattern</td><td class="v">Example: not a business-critical pipeline</td></tr>
-      <tr><td class="dim">5. Waves</td><td class="v">Migrate domain by domain, reusing the pilot pattern</td><td class="v">Migrated projects, wave after wave</td><td class="v">Example: one business domain per wave</td></tr>
-      <tr><td class="dim">6. Parallel run</td><td class="v">Run both platforms side by side; compare rows, aggregates and reports</td><td class="v">A report with no gap</td><td class="v">Example: over a few business cycles</td></tr>
-      <tr><td class="dim">7. Cutover</td><td class="v">Switch consumers after a tested rollback</td><td class="v">The project in production on Platform B</td><td class="v">Example: dashboards and apps</td></tr>
-      <tr><td class="dim">8. Decommission</td><td class="v">Switch off the source project and release its compute</td><td class="v">Source costs going down</td><td class="v">Example: the source nodes</td></tr>
-    </tbody>
-  </table>
-  <div class="pdec"><b>Where Platform B helps</b>Platform B can help run the inventory (phase 1), set up the pilot (phase 4) and run the parallel run (phase 6). The phase order is a proposed structure.</div>
-  <div class="note">Sources: add the link behind the phase model.</div>
-</div>
-
-<!-- ═══════════ 6 · TWO-PANEL SLIDE (block on the Process page; no half-page pair) ═══════════ -->
+<!-- ═══════════ PAGE 5 · OPTIONS IN COLUMNS, THEN PHASES (data-group="columns": two options side by side; the phases table below) ═══════════ -->
+<section class="slide" data-ch="Process" data-nm="Options and phases" data-group="columns">
 <div class="blk" id="s-options">
-  <div class="ch-label">Process · Options · 6 / 7</div>
-  <h2 class="blk-title">Option A and Option B: two ways to move a project</h1>
+  <div class="ch-label">Process · Options · 5 / 7</div>
+  <h2 class="blk-title">Option A and Option B: two ways to move a project, and the phases that follow</h2>
   <div class="cols2">
     <div class="panel p-dku"><div class="ph"><svg class="ico-sm cm"><use href="#ico-tool"/></svg><h3>Option A · keep the source compute</h3></div>
       <ul class="blist tight">
@@ -505,7 +509,7 @@ platform_a.dataset("orders_daily").write(df)</pre>
       <ul class="blist dbx tight">
         <li>Each project is rebuilt as SQL, notebooks, or pipelines and jobs.
           <ul class="sub">
-            <li>Each step gets one target and one command (slide 3).</li>
+            <li>Each step gets one target and one command (page 3).</li>
           </ul>
         </li>
         <li><b>Waves</b> follow business domains, starting with a pilot project end to end.</li>
@@ -513,15 +517,50 @@ platform_a.dataset("orders_daily").write(df)</pre>
       </ul>
     </div>
   </div>
-  <div class="pdec"><b>Where Platform B helps</b>Platform B can help measure cost, run time and gaps for each option during the pilot.</div>
-  <div class="note">Sources: add the link behind each option.</div>
+  <div class="ch-label" style="margin-top:0.6rem">Phases · one row per phase</div>
+  <table class="cmp">
+    <thead><tr><th>Phase</th><th>What we do concretely</th><th>Deliverable</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td class="dim">1. Inventory</td><td class="v">List each project through the API: objects by type, plugins, models, schedules</td><td class="v">A table per project with a complexity score</td><td class="v">Example: about 40 projects</td></tr>
+      <tr><td class="dim">2. Prioritise</td><td class="v">Classify each project as quick win, redesign or later wave</td><td class="v">The list of waves</td><td class="v">Example: high-volume pipelines first</td></tr>
+      <tr><td class="dim">3. Foundation</td><td class="v">Access model, source control, bundles, a first workspace</td><td class="v">A platform ready for a first project</td><td class="v">Example: one workspace per team</td></tr>
+      <tr><td class="dim">4. Pilot</td><td class="v">Migrate one project end to end; measure cost, run time and gaps</td><td class="v">The reusable migration pattern</td><td class="v">Example: not a business-critical pipeline</td></tr>
+      <tr><td class="dim">5. Waves</td><td class="v">Migrate domain by domain, reusing the pilot pattern</td><td class="v">Migrated projects, wave after wave</td><td class="v">Example: one business domain per wave</td></tr>
+      <tr><td class="dim">6. Parallel run</td><td class="v">Run both platforms side by side; compare rows, aggregates and reports</td><td class="v">A report with no gap</td><td class="v">Example: over a few business cycles</td></tr>
+      <tr><td class="dim">7. Cutover</td><td class="v">Switch consumers after a tested rollback</td><td class="v">The project in production on Platform B</td><td class="v">Example: dashboards and apps</td></tr>
+      <tr><td class="dim">8. Decommission</td><td class="v">Switch off the source project and release its compute</td><td class="v">Source costs going down</td><td class="v">Example: the source nodes</td></tr>
+    </tbody>
+  </table>
+  <div class="pdec"><b>Where Platform B helps</b>Platform B can help run the inventory (phase 1), set up the pilot (phase 4) and run the parallel run (phase 6). The phase order is a proposed structure.</div>
+  <div class="note">Sources: add the link behind each option and the phase model.</div>
 </div>
+</section>
 
-<!-- ═══════════ 7 · NEXT STEPS (checklist + next-step box; bottom half of the pair) ═══════════ -->
-<!-- ═══════════ 7 · NEXT STEPS (checklist + next-step box) ═══════════ -->
+<!-- ═══════════ PAGE 6 · TOP HALF OF A PAIR (data-group="half": the scope above the next steps) ═══════════ -->
+<section class="slide p2top" data-ch="Process" data-nm="Scope of the first wave" data-group="half">
+<div class="blk" id="s-scope">
+  <div class="ch-label">Process · Scope · 6 / 7</div>
+  <h1>Scope of the first wave: three projects, one pilot</h1>
+  <div class="panel p-dbx"><div class="ph"><svg class="ico-sm cdbx"><use href="#ico-target"/></svg><h3>In the first wave</h3></div>
+    <ul class="blist dbx tight">
+      <li>Three projects from the <b>finance</b> domain, chosen from the inventory.
+        <ul class="sub">
+          <li>Each project has one owner and one set of consumers.</li>
+        </ul>
+      </li>
+      <li>The pilot project is the one with the <b>fewest downstream consumers</b>.</li>
+    </ul>
+  </div>
+  <div class="pdec"><b>Out of scope</b>Real-time pipelines and the machine learning models move in a later wave.</div>
+  <div class="note">Sources: add the inventory export that the scope is based on.</div>
+</div>
+</section>
+
+<!-- ═══════════ PAGE 7 · BOTTOM HALF OF A PAIR (data-group="half": next steps) ═══════════ -->
+<section class="slide p2bot" data-ch="Process" data-nm="Next steps" data-group="half">
 <div class="blk" id="s-next">
   <div class="ch-label">Next steps · 7 / 7</div>
-  <h2 class="blk-title">Next step: pilot one project end to end</h1>
+  <h2 class="blk-title">Next step: pilot one project end to end</h2>
   <div class="mxquad">
     <div class="mxcat">
       <div class="mxcat-top"><h3>Prepare and rebuild</h3></div>
@@ -529,16 +568,11 @@ platform_a.dataset("orders_daily").write(df)</pre>
         <li>Inventory the project through the API, export its definition as a backup, and score it.</li>
         <li>Set up access, storage and a connection for the source data.</li>
         <li>Convert the file datasets in place, and set up a federated catalog for the database sources.</li>
-        <li>Rewrite SQL-capable steps as SQL; move the other steps to scripts.</li>
-        <li>Keep dependencies in the environment, without the platform runtime package.</li>
       </ul>
     </div>
     <div class="mxcat">
       <div class="mxcat-top"><h3>Deliver, compare and cut over</h3></div>
       <ul class="blist chk tight">
-        <li>Export each saved model to the registry, or retrain it; register it with its input schema.</li>
-        <li>Build the pipeline and the job, with checks for each source check.</li>
-        <li>Grant access per group; deploy dev and prod from one bundle.</li>
         <li>Compare each output with the source, both ways, plus keys and aggregates.</li>
         <li>Run both paths in parallel for the agreed cycles, rehearse the rollback, then cut over.</li>
       </ul>
@@ -550,21 +584,21 @@ platform_a.dataset("orders_daily").write(df)</pre>
 </section>
 
 <script>
-  const slides = [...document.querySelectorAll('.slide')];
+  const slides = [...document.querySelectorAll('section.slide')];
   const prevBtn = document.getElementById('navPrev');
   const nextBtn = document.getElementById('navNext');
-  // half-page pairs: selecting the bottom half (p2bot) scrolls to its top half (p2top)
+  // half-page pair: p2top + p2bot is ONE screen. Selecting the bottom half scrolls to its top half.
+  const isPairTop = i => !!(slides[i] && slides[i].classList.contains('p2top') && slides[i + 1] && slides[i + 1].classList.contains('p2bot'));
+  const screenOf = i => (i > 0 && slides[i].classList.contains('p2bot') && slides[i - 1].classList.contains('p2top')) ? i - 1 : i;
   const scrollTarget = s => (s.classList.contains('p2bot') && s.previousElementSibling && s.previousElementSibling.classList.contains('p2top')) ? s.previousElementSibling : s;
   const goTo = i => scrollTarget(slides[i]).scrollIntoView({ behavior: 'smooth' });
   const go = i => goTo(Math.max(0, Math.min(i, slides.length - 1)));
-  // screens: a half-page pair (p2top + p2bot) is ONE screen; arrows and keys step by screen, never onto the same screen
-  const isPairTop = i => !!(slides[i] && slides[i].classList.contains('p2top') && slides[i + 1] && slides[i + 1].classList.contains('p2bot'));
-  const screenOf = i => (i > 0 && slides[i].classList.contains('p2bot') && slides[i - 1].classList.contains('p2top')) ? i - 1 : i;
+  // arrows and keys step by screen, never onto the same screen
   const nextScreen = i => { const s = screenOf(i); return isPairTop(s) ? s + 2 : s + 1; };
   const prevScreen = i => { const s = screenOf(i); return s === 0 ? 0 : screenOf(s - 1); };
   function flashBlock(c){ setTimeout(() => { c.classList.remove('capflash'); void c.offsetWidth; c.classList.add('capflash'); c.addEventListener('animationend', () => c.classList.remove('capflash'), { once: true }); }, 450); }
 
-  // side menu: chapters + numbered slides from data-ch / data-nm; sub-entries = blocks (.mxcat) of a slide
+  // side menu: chapters + one entry per section (data-ch / data-nm); sub-entries = blocks (.mxcat) of a .mxdense page
   const side = document.createElement('aside'); side.className = 'dside';
   const chapters = [], items = [], slideCh = [];
   let lastCh = null;
@@ -598,10 +632,18 @@ platform_a.dataset("orders_daily").write(df)</pre>
     if (prevBtn) prevBtn.disabled = s === 0;
     if (nextBtn) nextBtn.disabled = nextScreen(s) >= slides.length;
   }
-  const observer = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { current = slides.indexOf(e.target); update(); } });
-  }, { threshold: 0.35 });
-  slides.forEach(s => observer.observe(s));
+  // current section = the last one whose top is in the upper half of the viewport; the last one at the page bottom.
+  // Scroll position, not IntersectionObserver: an observer with a threshold never marks a page taller than
+  // about 2.9 screens as current, and a half-page pair has two tops.
+  const curFromScroll = () => {
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 2) return slides.length - 1;
+    let k = 0; slides.forEach((s, i) => { if (s.getBoundingClientRect().top <= window.innerHeight * 0.5) k = i; }); return k;
+  };
+  let scrollTick = false;
+  window.addEventListener('scroll', () => {
+    if (scrollTick) return; scrollTick = true;
+    requestAnimationFrame(() => { scrollTick = false; const k = curFromScroll(); if (k !== current) { current = k; update(); } });
+  }, { passive: true });
   if (prevBtn) prevBtn.onclick = () => go(prevScreen(current));
   if (nextBtn) nextBtn.onclick = () => go(nextScreen(current));
   update();
