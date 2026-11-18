@@ -74,6 +74,10 @@
   /* ═══ SLIDE BASE — content-sized, top-aligned, one background tint ═══ */
   .slide{min-height:100vh;scroll-snap-align:start;padding:calc(var(--nav-h) + clamp(1.2rem,2.6vh,2.4rem)) clamp(1.6rem,4vw,5rem) clamp(1.6rem,3.5vh,3rem);border-bottom:1px solid var(--border);display:flex;flex-direction:column;justify-content:flex-start;gap:clamp(0.5rem,1.2vh,1rem);background:radial-gradient(ellipse at 88% 12%,var(--navy-dim) 0%,var(--bg) 58%);}
   .slide.dense{gap:clamp(0.4rem,1vh,0.8rem);}
+  /* merged page: several related blocks stacked on one screen (SKILL.md §10) */
+  .blk{display:flex;flex-direction:column;gap:clamp(0.4rem,1vh,0.8rem);min-width:0;}
+  .blk + .blk{border-top:2px solid var(--border2);padding-top:clamp(1rem,2.4vh,1.8rem);}
+  h2.blk-title{font-size:clamp(1.9rem,3.2vw,3.2rem);line-height:1.06;}
   .k{font-weight:700;color:var(--red);}
   .red{color:var(--red);}
   .ch-label{font-size:clamp(0.72rem,0.88vw,0.95rem);font-weight:700;letter-spacing:2.5px;text-transform:uppercase;color:var(--red);}
@@ -282,7 +286,8 @@
 </div>
 
 <!-- ═══════════ 1 · OVERVIEW WITH DIAGRAM ═══════════ -->
-<section class="slide dense" id="s-overview" data-ch="Overview" data-nm="Overview with diagram">
+<section class="slide mxdense" data-ch="Overview" data-nm="Overview and capability grid">
+<div class="blk" id="s-overview">
   <div class="ch-label">Overview · 1 / 7</div>
   <h1>Platform A: a layer over external compute · Platform B: one platform</h1>
   <p class="lead">One or two sentences of framing. The diagram shows which layer of Platform A lands on which layer of Platform B; the next slides show how each one is built.</p>
@@ -319,12 +324,12 @@
   </div>
   <div class="pdec"><b>What works</b>Example: the source layer can keep running on Platform B compute while the rebuild proceeds (slide 6).</div>
   <div class="note">Sources: add the link to the page behind each claim.</div>
-</section>
+</div>
 
 <!-- ═══════════ 2 · DENSE COMPARISON GRID (.mxdense) ═══════════ -->
-<section class="slide mxdense" id="s-grid" data-ch="Comparison" data-nm="Capability grid">
+<div class="blk" id="s-grid">
   <div class="ch-label">Comparison · Capabilities · 2 / 7</div>
-  <h1>Platform A and Platform B by category: model, data, tracing and access</h1>
+  <h2 class="blk-title">Platform A and Platform B by category: model, data, tracing and access</h1>
   <div class="mxquad">
     <div class="mxcat">
       <div class="mxcat-top"><div class="ch-label">Model</div><h3>Platform model</h3></div>
@@ -380,10 +385,12 @@
     </div>
   </div>
   <div class="note">Sources: add the link to the page behind each row. ✓ = supported, ✕ = not supported, ~ = partly or with a condition.</div>
+</div>
 </section>
 
 <!-- ═══════════ 3 · OBJECT-BY-OBJECT TABLE ═══════════ -->
-<section class="slide dense" id="s-objects" data-ch="Technical" data-nm="Object by object">
+<section class="slide" data-ch="Technical" data-nm="Object and API mapping">
+<div class="blk" id="s-objects">
   <div class="ch-label">Technical · Objects · 3 / 7</div>
   <h1>Object by object: each source object, how it migrates, and the target command</h1>
   <table class="cmp">
@@ -407,12 +414,12 @@
   </table>
   <div class="pdec"><b>Where Platform B helps</b>Platform B can help rebuild each object with the tool shown. Confirm each command on the target version before use.</div>
   <div class="note">Sources: add the link to the documentation of each tool in the command column.</div>
-</section>
+</div>
 
 <!-- ═══════════ 4 · API / CODE MAPPING ═══════════ -->
-<section class="slide" id="s-api" data-ch="Technical" data-nm="API mapping">
+<div class="blk" id="s-api">
   <div class="ch-label">Technical · API · 4 / 7</div>
-  <h1>API mapping: each Platform A call and its Platform B replacement</h1>
+  <h2 class="blk-title">API mapping: each Platform A call and its Platform B replacement</h1>
   <!-- table full width, then the before / after code and the pitfall side by side: one screen, no empty column -->
   <table class="cmp">
         <thead><tr><th>Platform A call</th><th class="c-dbx">Platform B replacement</th></tr></thead>
@@ -448,10 +455,12 @@ platform_a.dataset("orders_daily").write(df)</pre>
     </div>
   </div>
   <div class="note">Sources: add the API reference of each platform.</div>
+</div>
 </section>
 
 <!-- ═══════════ 5 · PROCESS / PHASES TABLE ═══════════ -->
-<section class="slide" id="s-phases" data-ch="Process" data-nm="Phases">
+<section class="slide" data-ch="Process" data-nm="Phases, options and next steps">
+<div class="blk" id="s-phases">
   <div class="ch-label">Process · Phases · 5 / 7</div>
   <h1>Phases: eight steps from inventory to decommissioning, each with a deliverable</h1>
   <table class="cmp">
@@ -469,16 +478,12 @@ platform_a.dataset("orders_daily").write(df)</pre>
   </table>
   <div class="pdec"><b>Where Platform B helps</b>Platform B can help run the inventory (phase 1), set up the pilot (phase 4) and run the parallel run (phase 6). The phase order is a proposed structure.</div>
   <div class="note">Sources: add the link behind the phase model.</div>
-</section>
+</div>
 
-<!-- ═══════════ 6 + 7 · HALF-PAGE PAIR: two short slides on one screen ═══════════ -->
-<!-- Slides 6 (top half) and 7 (bottom half) share one screen. This is the documented way to put
-     two short slides on one screen (SKILL.md §5 and §10). Each half is 50 vh and must fit its own
-     half. Do not pad a short slide with filler to reach the density target. -->
-<!-- ═══════════ 6 · TWO-PANEL SLIDE (top half of the pair) ═══════════ -->
-<section class="slide p2top" id="s-options" data-ch="Process" data-nm="Two options">
+<!-- ═══════════ 6 · TWO-PANEL SLIDE (block on the Process page; no half-page pair) ═══════════ -->
+<div class="blk" id="s-options">
   <div class="ch-label">Process · Options · 6 / 7</div>
-  <h1>Option A and Option B: two ways to move a project</h1>
+  <h2 class="blk-title">Option A and Option B: two ways to move a project</h1>
   <div class="cols2">
     <div class="panel p-dku"><div class="ph"><svg class="ico-sm cm"><use href="#ico-tool"/></svg><h3>Option A · keep the source compute</h3></div>
       <ul class="blist tight">
@@ -510,12 +515,13 @@ platform_a.dataset("orders_daily").write(df)</pre>
   </div>
   <div class="pdec"><b>Where Platform B helps</b>Platform B can help measure cost, run time and gaps for each option during the pilot.</div>
   <div class="note">Sources: add the link behind each option.</div>
-</section>
+</div>
 
 <!-- ═══════════ 7 · NEXT STEPS (checklist + next-step box; bottom half of the pair) ═══════════ -->
-<section class="slide p2bot" id="s-next" data-ch="Next steps" data-nm="Next steps">
+<!-- ═══════════ 7 · NEXT STEPS (checklist + next-step box) ═══════════ -->
+<div class="blk" id="s-next">
   <div class="ch-label">Next steps · 7 / 7</div>
-  <h1>Next step: pilot one project end to end</h1>
+  <h2 class="blk-title">Next step: pilot one project end to end</h1>
   <div class="mxquad">
     <div class="mxcat">
       <div class="mxcat-top"><h3>Prepare and rebuild</h3></div>
@@ -540,6 +546,7 @@ platform_a.dataset("orders_daily").write(df)</pre>
   </div>
   <div class="callout"><b>Next step</b> Agree the pilot project and its success measures with the customer owner, then run the inventory.</div>
   <div class="note">Sources: add the link behind each checklist item.</div>
+</div>
 </section>
 
 <script>
